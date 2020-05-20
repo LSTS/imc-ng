@@ -1,0 +1,1115 @@
+<messages>
+<!-- Maneuvering -->
+  <message id="451" name="PopUp Maneuver" abbrev="PopUp" source="ccu" category="Maneuvering">
+    <description>
+      The Pop Up maneuver makes the vehicle come to the surface at a
+      specific waypoint. This maneuver is restricted to underwater vehicles.
+    </description>
+    <field name="Timeout" abbrev="timeout" type="uint16_t" unit="s">
+      <description>
+        The amount of time the maneuver is allowed to run. If the
+        maneuver is not completed in the amount of time specified an
+        error will be generated.
+      </description>
+    </field>
+    <field name="Latitude WGS-84" abbrev="lat" type="fp64_t" unit="rad" min="-1.5707963267948966" max="1.5707963267948966">
+      <description>
+        WGS-84 Latitude.
+      </description>
+    </field>
+    <field name="Longitude WGS-84" abbrev="lon" type="fp64_t" unit="rad" min="-3.141592653589793" max="3.141592653589793">
+      <description>
+        WGS-84 Longitude.
+      </description>
+    </field>
+    <field name="Z Reference" abbrev="z" type="fp32_t" unit="m">
+      <description>
+        Maneuver reference in the z axis. Use z_units to specify
+        whether z represents depth, altitude or other.
+      </description>
+    </field>
+    <field name="Z Units" abbrev="z_units" type="uint8_t" value="0" unit="Enumerated" enum-def="ZUnits">
+      <description>
+        Units of the z reference.
+      </description>
+    </field>
+    <field name="Speed" abbrev="speed" type="fp32_t">
+      <description>
+        Maneuver speed reference.
+      </description>
+    </field>
+    <field name="Speed Units" abbrev="speed_units" type="uint8_t" value="0" unit="Enumerated" enum-def="SpeedUnits">
+      <description>
+        Speed units.
+      </description>
+    </field>
+    <field name="Duration" abbrev="duration" type="uint16_t" unit="s">
+      <description>
+        The duration of this maneuver at surface level.
+        Only used if flag WAIT_AT_SURFACE is on.
+      </description>
+    </field>
+    <field name="Radius" abbrev="radius" type="fp32_t" unit="m" min="1" max="100000">
+      <description>
+        Radius of the maneuver.
+        Only used if flag STATION_KEEP is on.
+      </description>
+    </field>
+    <field name="Flags" abbrev="flags" prefix="FLG" type="uint8_t" unit="Bitfield">
+      <description>
+        Flags of the maneuver.
+      </description>
+      <value id="0x01" abbrev="CURR_POS" name="Start from current position">
+        <description>
+          If this flag is set, lat/lon/start_z fields should be
+          ignored and current vehicle position should be considered as
+          starting point for ascent/descent.
+        </description>
+      </value>
+      <value id="0x02" abbrev="WAIT_AT_SURFACE" name="Wait at surface">
+        <description>
+          If this flag is set, duration field is used to hold position at surface
+          for that amount of time.
+        </description>
+      </value>
+      <value id="0x04" abbrev="STATION_KEEP" name="Station keeping">
+        <description>
+          This flag will only make sense if WAIT_AT_SURFACE is also set.
+          While holding position at surface the vehicle will assume a
+          station keeping behavior.
+        </description>
+      </value>
+    </field>
+    <field name="Custom settings for maneuver" abbrev="custom" unit="TupleList" type="plaintext">
+      <description>
+        Custom settings for maneuver.
+      </description>
+    </field>
+  </message>
+
+  <message id="452" name="Teleoperation Maneuver" abbrev="Teleoperation" source="ccu" category="Maneuvering">
+    <description>
+      The Teleoperation Maneuver lets the vehicle be controlled by an
+      external human operator.
+    </description>
+    <field name="Custom settings for maneuver" abbrev="custom" unit="TupleList" type="plaintext">
+      <description>
+        Custom settings for maneuver.
+      </description>
+    </field>
+  </message>
+
+  <message id="453" name="Loiter Maneuver" abbrev="Loiter" source="ccu" category="Maneuvering">
+    <description>
+      The Loiter maneuver makes the vehicle circle around a specific
+      waypoint with fixed depth reference.
+    </description>
+    <field name="Timeout" abbrev="timeout" type="uint16_t" unit="s">
+      <description>
+        The timeout indicates the time that an error should occur if
+        exceeded.
+      </description>
+    </field>
+    <field name="Latitude WGS-84" abbrev="lat" type="fp64_t" unit="rad" min="-1.5707963267948966" max="1.5707963267948966">
+      <description>
+        WGS-84 Latitude coordinate.
+      </description>
+    </field>
+    <field name="Longitude WGS-84" abbrev="lon" type="fp64_t" unit="rad" min="-3.141592653589793" max="3.141592653589793">
+      <description>
+        WGS-84 Longitude coordinate.
+      </description>
+    </field>
+    <field name="Z Reference" abbrev="z" type="fp32_t" unit="m">
+      <description>
+        Maneuver reference in the z axis. Use z_units to specify
+        whether z represents depth, altitude or other.
+      </description>
+    </field>
+    <field name="Z Units" abbrev="z_units" type="uint8_t" value="0" unit="Enumerated" enum-def="ZUnits">
+      <description>
+        Units of the z reference.
+      </description>
+    </field>
+    <field name="Duration" abbrev="duration" type="uint16_t" unit="s">
+      <description>
+        The duration of this maneuver. Use '0' for unlimited duration
+        time.
+      </description>
+    </field>
+    <field name="Speed" abbrev="speed" type="fp32_t">
+      <description>
+        Maneuver speed reference.
+      </description>
+    </field>
+    <field name="Speed Units" abbrev="speed_units" type="uint8_t" value="0" unit="Enumerated" enum-def="SpeedUnits">
+      <description>
+        Speed units.
+      </description>
+    </field>
+    <field name="Loiter Type" abbrev="type" type="uint8_t" unit="Enumerated" prefix="LT" max="4">
+      <description>
+        Loiter maneuver type.
+      </description>
+      <value id="0" name="Default" abbrev="DEFAULT"/>
+      <value id="1" name="Circular" abbrev="CIRCULAR"/>
+      <value id="2" name="Race track" abbrev="RACETRACK"/>
+      <value id="3" name="Figure 8" abbrev="EIGHT"/>
+      <value id="4" name="Hover" abbrev="HOVER"/>
+    </field>
+    <field name="Radius" abbrev="radius" type="fp32_t" unit="m" min="1" max="100000">
+      <description>
+        Radius of the maneuver.
+      </description>
+    </field>
+    <field name="Length" abbrev="length" type="fp32_t" unit="m" min="1" max="100000">
+      <description>
+        Length of the maneuver.
+      </description>
+    </field>
+    <field name="Bearing" abbrev="bearing" type="fp64_t" unit="rad" min="0" max="6.283185307179586">
+      <description>
+        Bearing of the maneuver.
+      </description>
+    </field>
+    <field name="Direction" abbrev="direction" type="uint8_t" unit="Enumerated" prefix="LD" max="3">
+      <description>
+        Desired direction.
+      </description>
+      <value id="0" name="Vehicle Dependent" abbrev="VDEP"/>
+      <value id="1" name="Clockwise" abbrev="CLOCKW"/>
+      <value id="2" name="Counter Clockwise" abbrev="CCLOCKW"/>
+      <value id="3" name="Into the wind/current" abbrev="IWINDCURR"/>
+    </field>
+    <field name="Custom settings for maneuver" abbrev="custom" unit="TupleList" type="plaintext">
+      <description>
+        Custom settings for maneuver.
+      </description>
+    </field>
+  </message>
+  <message id="456" name="Rows Maneuver" abbrev="Rows" source="ccu" category="Maneuvering">
+    <description>Rows maneuver (i.e: lawn mower type maneuver)</description>
+    <field name="Timeout" abbrev="timeout" type="uint16_t" unit="s">
+      <description>
+        The amount of time the maneuver is allowed to run.
+      </description>
+    </field>
+    <field name="Latitude WGS-84" abbrev="lat" type="fp64_t" unit="rad" min="-1.5707963267948966" max="1.5707963267948966">
+      <description>
+        WGS-84 Latitude of target waypoint.
+      </description>
+    </field>
+    <field name="Longitude WGS-84" abbrev="lon" type="fp64_t" unit="rad" min="-3.141592653589793" max="3.141592653589793">
+      <description>
+        WGS-84 Longitude of target waypoint.
+      </description>
+    </field>
+    <field name="Z Reference" abbrev="z" type="fp32_t" unit="m">
+      <description>
+        Maneuver reference in the z axis. Use z_units to specify
+        whether z represents depth, altitude or other.
+      </description>
+    </field>
+    <field name="Z Units" abbrev="z_units" type="uint8_t" value="0" unit="Enumerated" enum-def="ZUnits">
+      <description>
+        Units of the z reference.
+      </description>
+    </field>
+    <field name="Speed" abbrev="speed" type="fp32_t">
+      <description>
+        Maneuver speed reference.
+      </description>
+    </field>
+    <field name="Speed Units" abbrev="speed_units" type="uint8_t" value="0" unit="Enumerated" enum-def="SpeedUnits">
+      <description>
+        Speed units.
+      </description>
+    </field>
+    <field name="Bearing" abbrev="bearing" type="fp64_t" unit="rad" min="0" max="6.283185307179586">
+      <description>
+        Rows bearing angle.
+      </description>
+    </field>
+    <field name="Cross Angle" abbrev="cross_angle" type="fp64_t" unit="rad" min="-1.047197551197" max="1.047197551197">
+      <description>
+        Rows cross angle reference.
+      </description>
+    </field>
+    <field name="Width" abbrev="width" min="0" type="fp32_t" unit="m">
+      <description>
+        Width of the maneuver.
+      </description>
+    </field>
+    <field name="Length" abbrev="length" min="0" type="fp32_t" unit="m">
+      <description>
+        Length of the maneuver.
+      </description>
+    </field>
+    <field name="Horizontal Step" abbrev="hstep" type="fp32_t" unit="m" min="0" value="30">
+      <description>
+        Horizontal step.
+      </description>
+    </field>
+    <field name="Curve Offset" abbrev="coff" type="uint8_t" unit="m">
+      <description>
+        Desired curve offset.
+      </description>
+    </field>
+    <field name="Alternation Parameter" abbrev="alternation" type="uint8_t" unit="%" max="100" value="50">
+      <description>
+        Alternation parameter.
+      </description>
+    </field>
+    <field name="Flags" abbrev="flags" type="uint8_t" unit="Bitfield" prefix="FLG">
+      <description>
+        Maneuver flags.
+      </description>
+      <value id="0x0001" name="Square Curve" abbrev="SQUARE_CURVE"/>
+      <value id="0x0002" name="First Curve Right" abbrev="CURVE_RIGHT"/>
+    </field>
+    <field name="Custom settings for maneuver" abbrev="custom" unit="TupleList" type="plaintext">
+      <description>
+        Custom settings for maneuver.
+      </description>
+    </field>
+  </message>
+
+  <message id="457" name="Follow Path Maneuver" abbrev="FollowPath" source="ccu" category="Maneuvering">
+    <description>
+      Maneuver constituted by a list of Path Points.
+    </description>
+    <field name="Timeout" abbrev="timeout" type="uint16_t" unit="s">
+      <description>
+        The amount of time the maneuver is allowed to run.
+      </description>
+    </field>
+    <field name="Latitude WGS-84" abbrev="lat" type="fp64_t" unit="rad" min="-1.5707963267948966" max="1.5707963267948966">
+      <description>WGS-84 Latitude of start point.</description>
+    </field>
+    <field name="Longitude WGS-84" abbrev="lon" type="fp64_t" unit="rad" min="-3.141592653589793" max="3.141592653589793">
+      <description>WGS-84 Longitude of start point.</description>
+    </field>
+    <field name="Z Reference" abbrev="z" type="fp32_t" unit="m">
+      <description>
+        Maneuver reference in the z axis. Use z_units to specify
+        whether z represents depth, altitude or other.
+      </description>
+    </field>
+    <field name="Z Units" abbrev="z_units" type="uint8_t" value="0" unit="Enumerated" enum-def="ZUnits">
+      <description>
+        Units of the z reference.
+      </description>
+    </field>
+    <field name="Speed" abbrev="speed" type="fp32_t">
+      <description>
+        Maneuver speed reference.
+      </description>
+    </field>
+    <field name="Speed Units" abbrev="speed_units" type="uint8_t" value="0" unit="Enumerated" enum-def="SpeedUnits">
+      <description>
+        Speed units.
+      </description>
+    </field>
+    <field name="Path Points" abbrev="points" type="message-list" message-type="PathPoint">
+      <description>
+        List of PathPoint messages, encoding the path points.
+      </description>
+    </field>
+    <field name="Custom settings for maneuver" abbrev="custom" unit="TupleList" type="plaintext">
+      <description>
+        Custom settings for maneuver.
+      </description>
+    </field>
+  </message>
+
+  <message id="458" name="Path Point" abbrev="PathPoint" category="Maneuvering">
+    <description>
+      Waypoint coordinate of a Follow Path maneuver.
+    </description>
+    <field name="North Offset (m)" abbrev="x" type="fp32_t" unit="m">
+      <description>
+        The North offset of the North/East/Down coordinate of this
+        point in relation to the path start point.
+      </description>
+    </field>
+    <field name="East Offset (m)" abbrev="y" type="fp32_t" unit="m">
+      <description>
+        The East offset of the North/East/Down coordinate of this
+        point in relation to the path start point.
+      </description>
+    </field>
+    <field name="Down Offset (m)" abbrev="z" type="fp32_t" unit="m">
+      <description>
+        The Down offset of the North/East/Down coordinate of this
+        point in relation to the path start point.
+      </description>
+    </field>
+  </message>
+
+  <message id="459" name="Yo-Yo Maneuver" abbrev="YoYo" source="ccu" category="Maneuvering">
+    <description>
+      A "yo-yo" is a maneuver specifying a vehicle movement to a
+      target waypoint in which depth/altitude varies along the way
+      between two values with a desired pitch angle.
+    </description>
+    <field name="Timeout" abbrev="timeout" type="uint16_t" unit="s">
+      <description>
+        The amount of time the maneuver is allowed to run.
+      </description>
+    </field>
+    <field name="Latitude WGS-84" abbrev="lat" type="fp64_t" unit="rad" min="-1.5707963267948966" max="1.5707963267948966">
+      <description>
+        WGS-84 Latitude of target waypoint.
+      </description>
+    </field>
+    <field name="Longitude WGS-84" abbrev="lon" type="fp64_t" unit="rad" min="-3.141592653589793" max="3.141592653589793">
+      <description>
+        WGS-84 Longitude of target waypoint.
+      </description>
+    </field>
+    <field name="Z Reference" abbrev="z" type="fp32_t" unit="m">
+      <description>
+        Maneuver reference in the z axis.
+        Use z_units to specify whether z represents depth, altitude or other.
+      </description>
+    </field>
+    <field name="Z Units" abbrev="z_units" type="uint8_t" value="0" unit="Enumerated" enum-def="ZUnits">
+      <description>
+        Units of the z reference.
+      </description>
+    </field>
+    <field name="Amplitude" abbrev="amplitude" type="fp32_t" unit="m">
+      <description>
+        Amplitude.
+      </description>
+    </field>
+    <field name="Pitch Angle" abbrev="pitch" type="fp32_t" unit="rad" min="0" max="0.78539816">
+      <description>
+        Pitch angle for use in ascent/descent.
+      </description>
+    </field>
+    <field name="Speed" abbrev="speed" type="fp32_t">
+      <description>
+        Maneuver speed reference.
+      </description>
+    </field>
+    <field name="Speed Units" abbrev="speed_units" type="uint8_t" value="0" unit="Enumerated" enum-def="SpeedUnits">
+      <description>
+        Speed units.
+      </description>
+    </field>
+    <field name="Custom settings for maneuver" abbrev="custom" unit="TupleList" type="plaintext">
+      <description>
+        Custom settings for maneuver.
+      </description>
+    </field>
+  </message>
+
+  <message id="460" name="Teleoperation Done" abbrev="TeleoperationDone" source="ccu" category="Maneuvering">
+    <description>
+      Notification of completion of a Teleoperation maneuver.
+    </description>
+  </message>
+  <message id="462" name="Elevator Maneuver" abbrev="Elevator" source="ccu" category="Maneuvering">
+    <description>
+      The Elevator maneuver specifies a vehicle to reach a target
+      waypoint using a cruise altitude/depth and then ascend or
+      descend to another target altitude/depth. The ascent/descent
+      slope and radius can also be optionally specified.
+    </description>
+    <field name="Timeout" abbrev="timeout" type="uint16_t" unit="s">
+      <description>
+        The amount of time the maneuver is allowed to run. If the
+        maneuver is not completed in the amount of time specified an
+        error will be generated.
+      </description>
+    </field>
+    <field name="Flags" abbrev="flags" prefix="FLG" type="uint8_t" unit="Bitfield">
+      <description>
+        Flags of the maneuver.
+      </description>
+      <value id="0x01" abbrev="CURR_POS" name="Start from current position">
+        <description>
+          If this flag is set, lat/lon/start_z fields should be
+          ignored and current vehicle position should be considered as
+          starting point for ascent/descent.
+        </description>
+      </value>
+    </field>
+    <field name="Latitude WGS-84" abbrev="lat" type="fp64_t" unit="rad" min="-1.5707963267948966" max="1.5707963267948966">
+      <description>
+        WGS-84 Latitude.
+      </description>
+    </field>
+    <field name="Longitude WGS-84" abbrev="lon" type="fp64_t" unit="rad" min="-3.141592653589793" max="3.141592653589793">
+      <description>
+        WGS-84 Longitude.
+      </description>
+    </field>
+    <field name="Start Point -- Z Reference" abbrev="start_z" type="fp32_t" unit="m">
+      <description>
+        Altitude or depth of start point. This parameter will be
+        ignored if the 'NO_Z' flag is set, or if the 'START' flag is
+        not set.
+      </description>
+    </field>
+    <field name="Start Point -- Z Units" abbrev="start_z_units" type="uint8_t" value="0" unit="Enumerated" enum-def="ZUnits">
+      <description>
+        Units of the start point's z reference.
+      </description>
+    </field>
+    <field name="End Point -- Z Reference" abbrev="end_z" type="fp32_t" unit="m">
+      <description>
+        Depth or altitude for the end point.  This parameter will be
+        ignored if the 'NO_Z' flag is set.
+      </description>
+    </field>
+    <field name="End Point -- Z Units" abbrev="end_z_units" type="uint8_t" value="0" unit="Enumerated" enum-def="ZUnits">
+      <description>
+        Units of the end point's z reference.
+      </description>
+    </field>
+    <field name="Radius" abbrev="radius" type="fp32_t" unit="m" min="0">
+      <description>
+        Radius for use in ascent/descent. If 0 the controller to
+        should use a custom control strategy.
+      </description>
+    </field>
+    <field name="Speed" abbrev="speed" type="fp32_t">
+      <description>
+        Maneuver speed.
+      </description>
+    </field>
+    <field name="Speed Units" abbrev="speed_units" type="uint8_t" value="0" unit="Enumerated" enum-def="SpeedUnits">
+      <description>
+        Speed units.
+      </description>
+    </field>
+    <field name="Custom settings for maneuver" abbrev="custom" unit="TupleList" type="plaintext">
+      <description>
+        Custom settings for maneuver.
+      </description>
+    </field>
+  </message>
+
+  <message id="463" name="Follow Trajectory" abbrev="FollowTrajectory" source="ccu" category="Maneuvering">
+    <description>
+      Maneuver constituted by a list of Trajectory Points.
+    </description>
+    <field name="Timeout" abbrev="timeout" type="uint16_t" unit="s">
+      <description>
+        The amount of time the maneuver is allowed to run.
+      </description>
+    </field>
+    <field name="Latitude WGS-84" abbrev="lat" type="fp64_t" unit="rad" min="-1.5707963267948966" max="1.5707963267948966">
+      <description>
+        WGS-84 Latitude for start point.
+      </description>
+    </field>
+    <field name="Longitude WGS-84" abbrev="lon" type="fp64_t" unit="rad" min="-3.141592653589793" max="3.141592653589793">
+      <description>
+        WGS-84 Longitude for start point.
+      </description>
+    </field>
+    <field name="Z Reference" abbrev="z" type="fp32_t" unit="m">
+      <description>
+        Maneuver reference in the z axis. Use z_units to specify
+        whether z represents depth, altitude or other.
+      </description>
+    </field>
+    <field name="Z Units" abbrev="z_units" type="uint8_t" value="0" unit="Enumerated" enum-def="ZUnits">
+      <description>
+        Units of the z reference.
+      </description>
+    </field>
+    <field name="Speed" abbrev="speed" type="fp32_t">
+      <description>
+        Maneuver speed.
+      </description>
+    </field>
+    <field name="Speed Units" abbrev="speed_units" type="uint8_t" value="0" unit="Enumerated" enum-def="SpeedUnits">
+      <description>
+        Speed units.
+      </description>
+    </field>
+    <field name="Trajectory Points" abbrev="points" type="message-list" message-type="TrajectoryPoint">
+      <description>
+        List of trajectory points.
+      </description>
+    </field>
+    <field name="Custom settings for maneuver" abbrev="custom" unit="TupleList" type="plaintext">
+      <description>
+        Custom settings for maneuver.
+      </description>
+    </field>
+  </message>
+
+  <message id="464" name="Trajectory Point" abbrev="TrajectoryPoint" category="Maneuvering">
+    <description>
+      Waypoint coordinate of a Follow Trajectory maneuver.
+    </description>
+    <field name="North Offset (m)" abbrev="x" type="fp32_t" unit="m">
+      <description>
+        The North offset of the North/East/Down coordinate of this
+        point in relation to the trajectory start point.
+      </description>
+    </field>
+    <field name="East Offset (m)" abbrev="y" type="fp32_t" unit="m">
+      <description>
+        The East offset of the North/East/Down coordinate of this
+        point in relation to the trajectory start point.
+      </description>
+    </field>
+    <field name="Down Offset (m)" abbrev="z" type="fp32_t" unit="m">
+      <description>
+        The Down offset of the North/East/Down coordinate of this
+        point in relation to the trajectory start point.
+      </description>
+    </field>
+    <field name="Time Offset (s)" abbrev="t" type="fp32_t" unit="s">
+      <description>
+        The time offset relative to the previous trajectory point.
+      </description>
+    </field>
+  </message>
+
+  <message id="465" name="Custom Maneuver" abbrev="CustomManeuver" source="ccu" category="Maneuvering">
+    <description>
+      The Custom Maneuver message may be used as specification of a
+      very specific maneuver not covered by the IMC scope. The
+      settings of the maneuver are just its id, timeout and other
+      settings encoded as a tuple list.
+    </description>
+    <field name="Timeout" abbrev="timeout" type="uint16_t" unit="s">
+      <description>
+        The amount of time the maneuver is allowed to run. If the
+        maneuver is not completed in the amount of time specified an
+        error will be generated.
+      </description>
+    </field>
+    <field name="Maneuver Name" abbrev="name" type="plaintext">
+      <description>
+        The maneuver name, used as key by an implementation to bind
+        the maneuver to the corresponding controller.
+      </description>
+    </field>
+    <field name="Custom settings for maneuver" abbrev="custom" unit="TupleList" type="plaintext">
+      <description>
+        Custom settings for maneuver.
+      </description>
+    </field>
+  </message>
+
+  <message id="474" name="Polygon Vertex" abbrev="PolygonVertex" category="Maneuvering">
+    <description>
+      This message is used to store the various polygon vertices for
+      CoverArea maneuvers.
+    </description>
+    <field name="Latitude WGS-84" abbrev="lat" type="fp64_t" unit="rad" min="-1.5707963267948966" max="1.5707963267948966">
+      <description>
+        WGS-84 Latitude for start point.
+      </description>
+    </field>
+    <field name="Longitude WGS-84" abbrev="lon" type="fp64_t" unit="rad" min="-3.141592653589793" max="3.141592653589793">
+      <description>
+        WGS-84 Longitude for start point.
+      </description>
+    </field>
+  </message>
+
+  <message id="475" name="Compass Calibration Maneuver" abbrev="CompassCalibration" source="ccu" category="Maneuvering">
+    <description>
+      This maneuver is a mix between the Loiter maneuver and the YoYo maneuver.
+      The vehicle cirlcles around a specific waypoint with a variable Z
+      reference between a minimum and maximum value.
+    </description>
+    <field name="Timeout" abbrev="timeout" type="uint16_t" unit="s">
+      <description>
+        The timeout indicates the time that an error should occur if
+        exceeded.
+      </description>
+    </field>
+    <field name="Latitude WGS-84" abbrev="lat" type="fp64_t" unit="rad" min="-1.5707963267948966" max="1.5707963267948966">
+      <description>
+        WGS-84 Latitude coordinate.
+      </description>
+    </field>
+    <field name="Longitude WGS-84" abbrev="lon" type="fp64_t" unit="rad" min="-3.141592653589793" max="3.141592653589793">
+      <description>
+        WGS-84 Longitude coordinate.
+      </description>
+    </field>
+    <field name="Z Reference" abbrev="z" type="fp32_t" unit="m">
+      <description>
+        Maneuver reference in the z axis. Use z_units to specify
+        whether z represents depth, altitude or other.
+      </description>
+    </field>
+    <field name="Z Units" abbrev="z_units" type="uint8_t" value="0" unit="Enumerated" enum-def="ZUnits">
+      <description>
+        Units of the z reference.
+      </description>
+    </field>
+    <field name="Pitch" abbrev="pitch" type="fp32_t" unit="rad" min="-1.5707963267948966" max="1.5707963267948966">
+      <description>
+        Pitch angle used to perform the maneuver.
+      </description>
+    </field>
+    <field name="Amplitude" abbrev="amplitude" type="fp32_t" unit="m">
+      <description>
+        Yoyo motion amplitude.
+      </description>
+    </field>
+    <field name="Duration" abbrev="duration" type="uint16_t" unit="s">
+      <description>
+        The duration of this maneuver. Use '0' for unlimited duration time.
+      </description>
+    </field>
+    <field name="Speed" abbrev="speed" type="fp32_t">
+      <description>
+        Maneuver speed.
+      </description>
+    </field>
+    <field name="Speed Units" abbrev="speed_units" type="uint8_t" value="0" unit="Enumerated" enum-def="SpeedUnits">
+      <description>
+        Speed units.
+      </description>
+    </field>
+    <field name="Radius" abbrev="radius" type="fp32_t" unit="m" min="1" max="100000">
+      <description>
+        Radius of the maneuver.
+      </description>
+    </field>
+    <field name="Direction" abbrev="direction" type="uint8_t" unit="Enumerated" prefix="LD" max="3">
+      <description>
+        Direction of the maneuver.
+      </description>
+      <value id="0" name="Vehicle Dependent" abbrev="VDEP"/>
+      <value id="1" name="Clockwise" abbrev="CLOCKW"/>
+      <value id="2" name="Counter Clockwise" abbrev="CCLOCKW"/>
+      <value id="3" name="Into the wind/current" abbrev="IWINDCURR"/>
+    </field>
+    <field name="Custom settings for maneuver" abbrev="custom" unit="TupleList" type="plaintext">
+      <description>
+        Custom settings for maneuver.
+      </description>
+    </field>
+  </message>
+
+  <message id="478" name="Follow Reference Maneuver" abbrev="FollowReference" source="ccu" category="Maneuvering">
+    <description>
+      This maneuver follows a reference given by an external entity.
+    </description>
+    <field name="Controlling Source" abbrev="control_src" type="uint16_t">
+      <description>
+        The IMC identifier of the source system that is allowed to provide references to this maneuver.
+        If the value ''0xFFFF'' is used, any system is allowed to command references.
+      </description>
+    </field>
+    <field name="Controlling Entity" abbrev="control_ent" type="uint8_t">
+      <description>
+        The entity identifier of the entity that is allowed to provide references to this maneuver.
+        If the value ''0xFF'' is used, any entity is allowed to command references.
+      </description>
+    </field>
+    <field name="Reference Update Timeout" abbrev="timeout" type="fp32_t">
+      <description>
+        The ammount of time, in seconds, after which the maneuver will be terminated if no reference has
+        been received. In other words, the controlling entity should send reference updates in shorter periods than
+        'timeout'.
+      </description>
+    </field>
+    <field name="Loiter Radius" abbrev="loiter_radius" type="fp32_t">
+      <description>
+        Whenever an intended reference is achieved, this maneuver will maintain the vehicle in vaticiny of that
+        location. The loiter radius is used to define the radius of this (xy) area.
+      </description>
+    </field>
+    <field name="Altitude Interval" abbrev="altitude_interval" type="fp32_t">
+      <description>
+        Similarly to Loiter Radius, this field is used to define the "z" distance considered to be inside the vacitiny of
+        the target location. An AUV may, for instance, be floating until it more than z units above the current reference,
+        in which case it actively changes its position in order to achieve the desired depth / altitude.
+      </description>
+    </field>
+  </message>
+
+  <message id="479" name="Reference To Follow" abbrev="Reference" source="ccu,vehicle" category="Maneuvering">
+    <field name="Flags" abbrev="flags" type="uint8_t" unit="Bitfield" prefix="FLAG">
+      <value abbrev="LOCATION" name="Use Location Reference" id="0x01"/>
+      <value abbrev="SPEED" name="Use Speed Reference" id="0x02"/>
+      <value abbrev="Z" name="Use Z Reference" id="0x04"/>
+      <value abbrev="RADIUS" name="Use Radius Reference" id="0x08"/>
+      <value abbrev="START_POINT" name="Use this Reference as Start Position for PathControler" id="0x10"/>
+      <value abbrev="DIRECT" name="Use Current Position as Start Position for PathControler" id="0x20"/>
+      <value abbrev="MANDONE" name="Flag Maneuver Completion" id="0x80"/>
+    </field>
+    <field name="Speed Reference" abbrev="speed" type="message" message-type="DesiredSpeed"/>
+    <field name="Z Reference" abbrev="z" type="message" message-type="DesiredZ"/>
+    <field name="Latitude Reference" abbrev="lat" type="fp64_t"/>
+    <field name="Longitude Reference" abbrev="lon" type="fp64_t"/>
+    <field name="Radius" abbrev="radius" type="fp32_t"/>
+  </message>
+
+  <message id="480" name="Follow Reference State" abbrev="FollowRefState" source="vehicle" category="Maneuvering">
+    <field name="Controlling Source" abbrev="control_src" type="uint16_t">
+      <description>
+        The IMC identifier of the source system that is allowed to control the vehicle.
+        If the value ''0xFFFF'' is used, any system is allowed to command references.
+      </description>
+    </field>
+    <field name="Controlling Entity" abbrev="control_ent" type="uint8_t">
+      <description>
+        The entity identifier of the entity that is allowed to control the vehicle.
+        If the value ''0xFF'' is used, any entity is allowed to command references.
+      </description>
+    </field>
+    <field name="Reference" abbrev="reference" type="message" message-type="Reference">
+      <description>Reference currently being followed.</description>
+    </field>
+    <field name="State" abbrev="state" type="uint8_t" unit="Enumerated" prefix="FR">
+      <value abbrev="WAIT" name="Waiting for first reference" id="1"/>
+      <value abbrev="GOTO" name="Going towards received reference" id="2"/>
+      <value abbrev="LOITER" name="Loitering after arriving at the reference" id="3"/>
+      <value abbrev="HOVER" name="Hovering after arriving at the reference" id="4"/>
+      <value abbrev="ELEVATOR" name="Moving in z after arriving at the target cylinder" id="5"/>
+      <value abbrev="TIMEOUT" name="Controlling system timed out" id="6"/>
+    </field>
+    <field name="Proximity" abbrev="proximity" type="uint8_t" unit="Bitfield" prefix="PROX">
+      <value abbrev="FAR" name="Far from the destination" id="0x01"/>
+      <value abbrev="XY_NEAR" name="Near in the horizontal plane" id="0x02"/>
+      <value abbrev="Z_NEAR" name="Near in the vertical plane" id="0x04"/>
+      <value abbrev="XY_UNREACHABLE" name="Unreachable in the horizontal plane" id="0x08"/>
+      <value abbrev="Z_UNREACHABLE" name="Unreachable in the vertical plane" id="0x10"/>
+    </field>
+  </message>
+
+  <message id="483" name="Dislodge Maneuver" abbrev="Dislodge" source="ccu" category="Maneuvering">
+    <description>
+      A "Dislodge" is a maneuver ordering the vehicle to attempt a
+      series of thruster operations that will hopefully get it
+      unstuck from an entangled condition.
+
+      Parameters are RPMs for the motor when attempting dislodge and
+      and a flag specifying whether the thrust burst should be attempted
+      forward, backward or auto (letting the vehicle decide).
+    </description>
+    <field name="Timeout" abbrev="timeout" type="uint16_t" unit="s">
+      <description>
+        The amount of time the maneuver is allowed to run.
+      </description>
+    </field>
+    <field name="RPM" abbrev="rpm" type="fp32_t">
+      <description>
+        Maneuver RPM reference.
+      </description>
+    </field>
+    <field name="Direction" abbrev="direction" type="uint8_t" unit="Enumerated" prefix="DIR">
+      <description>
+        Direction to which the vehicle should attempt to unstuck.
+      </description>
+      <value abbrev="AUTO" name="Let the vehicle decide" id="0"/>
+      <value abbrev="FORWARD" name="Attempt to move forward" id="1"/>
+      <value abbrev="BACKWARD" name="Attempt to move backward" id="2"/>
+    </field>
+    <field name="Custom settings for maneuver" abbrev="custom" unit="TupleList" type="plaintext">
+      <description>
+        Custom settings for maneuver.
+      </description>
+    </field>
+  </message>
+
+  <message id="485" name="Launch Maneuver" abbrev="Launch" source="ccu" category="Maneuvering">
+    <description>
+      A "Launch" is a maneuver specifying a movement of the vehicle to a
+      target waypoint after being launched from a ship or pier.
+      The waypoint is described by the WGS-84 waypoint coordinate and
+      target Z reference.
+
+      Mandatory parameters defined for a "Launch" are
+      timeout, speed and speed units.
+    </description>
+    <field name="Timeout" abbrev="timeout" type="uint16_t" unit="s">
+      <description>
+        The amount of time the maneuver is allowed to run.
+      </description>
+    </field>
+    <field name="Latitude WGS-84" abbrev="lat" type="fp64_t" unit="rad" min="-1.5707963267948966" max="1.5707963267948966">
+      <description>
+        WGS-84 Latitude of target waypoint.
+      </description>
+    </field>
+    <field name="Longitude WGS-84" abbrev="lon" type="fp64_t" unit="rad" min="-3.141592653589793" max="3.141592653589793">
+      <description>
+        WGS-84 Longitude of target waypoint.
+      </description>
+    </field>
+    <field name="Z Reference" abbrev="z" type="fp32_t" unit="m">
+      <description>
+        Target reference in the z axis. Use z_units to specify
+        whether z represents depth, altitude or other.
+      </description>
+    </field>
+    <field name="Z Units" abbrev="z_units" type="uint8_t" value="0" unit="Enumerated" enum-def="ZUnits">
+      <description>
+        Units of the z reference.
+      </description>
+    </field>
+    <field name="Speed" abbrev="speed" type="fp32_t">
+      <description>
+        Maneuver speed reference.
+      </description>
+    </field>
+    <field name="Speed Units" abbrev="speed_units" type="uint8_t" value="0" unit="Enumerated" enum-def="SpeedUnits">
+      <description>
+        Speed units.
+      </description>
+    </field>
+    <field name="Custom settings for maneuver" abbrev="custom" unit="TupleList" type="plaintext">
+      <description>
+        Custom settings for maneuver.
+      </description>
+    </field>
+  </message>
+
+  <message id="495" name="Alignment Maneuver" abbrev="Alignment" source="ccu" category="Maneuvering">
+      <description>
+      An "Alignment" is a maneuver specifying a movement of the vehicle to a
+      target waypoint intended to control activation of an IMU/INS in order
+      to start aligning navigation for more precise dead reckoning operation.
+
+      Mandatory parameters defined for a "Launch" are
+      timeout, speed and speed units.
+    </description>
+    <field name="Timeout" abbrev="timeout" type="uint16_t" unit="s">
+      <description>
+        The amount of time the maneuver is allowed to run.
+      </description>
+    </field>
+    <field name="Latitude WGS-84" abbrev="lat" type="fp64_t" unit="rad" min="-1.5707963267948966" max="1.5707963267948966">
+      <description>
+        WGS-84 Latitude of target waypoint.
+      </description>
+    </field>
+    <field name="Longitude WGS-84" abbrev="lon" type="fp64_t" unit="rad" min="-3.141592653589793" max="3.141592653589793">
+      <description>
+        WGS-84 Longitude of target waypoint.
+      </description>
+    </field>
+    <field name="Speed" abbrev="speed" type="fp32_t">
+      <description>
+        Maneuver speed reference.
+      </description>
+    </field>
+    <field name="Speed Units" abbrev="speed_units" type="uint8_t" value="0" unit="Enumerated" enum-def="SpeedUnits">
+      <description>
+        Speed units.
+      </description>
+    </field>
+    <field name="Custom settings for maneuver" abbrev="custom" unit="TupleList" type="plaintext">
+      <description>
+        Custom settings for maneuver.
+      </description>
+    </field>
+  </message>
+
+  <message id="496" name="Follow Command Maneuver" abbrev="FollowCommand" source="ccu" category="Maneuvering">
+    <description>
+      This maneuver follows a direct command given by an external entity.
+    </description>
+    <field name="Controlling Source" abbrev="control_src" type="uint16_t">
+      <description>
+        The IMC identifier of the source system that is allowed to provide command to this maneuver.
+	If the value ''0xFFFF'' is used, any system is allowed to command references.
+      </description>
+    </field>
+    <field name="Controlling Entity" abbrev="control_ent" type="uint8_t">
+      <description>
+        The entity identifier of the entity that is allowed to provide commands to this maneuver.
+        If the value ''0xFF'' is used, any entity is allowed to command references.
+      </description>
+    </field>
+    <field name="Reference Update Timeout" abbrev="timeout" type="fp32_t">
+      <description>
+        The ammount of time, in seconds, after which the maneuver will be terminated if no new command has
+        been received. In other words, the controlling entity should send command updates in shorter periods than
+        'timeout'.
+      </description>
+    </field>
+  </message>
+
+  <message id="497" name="Command To Follow" abbrev="Command" source="ccu,vehicle" category="Maneuvering">
+    <description>
+      This message must be sent by an external entity to provide command references to a system
+      running a "Follow Command Maneuver". If no Command messages are transmitted, the system
+      will terminate maneuver.
+    </description>
+    <field name="Flags" abbrev="flags" type="uint8_t" unit="Bitfield" prefix="FLAG">
+      <value abbrev="SPEED_METERS_PS" name="Use Speed Reference in meters per second" id="0x01">
+	<description>
+	  Command system to move at speed reference provided in "speed" field in meters per second.
+	</description>
+      </value>
+      <value abbrev="SPEED_RPM" name="Use Speed Reference in revolutions per minute" id="0x02">
+	<description>
+	  Command system to move at speed reference provided in "speed" field in revolutions per minute.
+	</description>
+      </value>
+      <value abbrev="DEPTH" name="Use Z Reference as depth" id="0x04">
+	<description>
+	  Command system to move at z reference provided in "z" field in depth.
+	</description>
+      </value>
+      <value abbrev="ALTITUDE" name="Use Z Reference as altitude" id="0x08">
+	<description>
+	  Command system to move at z reference provided in "z" field in altitude.
+	</description>
+      </value>
+      <value abbrev="HEADING" name="Use Heading Reference" id="0x10">
+	<description>
+	  Command system to move at a heading reference provided in "heading" field in radians.
+	</description>
+      </value>
+      <value abbrev="HEADING_RATE" name="Use Heading Rate Reference" id="0x20">
+	<description>
+	  Command system to move at a heading rate reference provided in "heading" field in radians/s.
+	</description>
+      </value>
+      <value abbrev="MANDONE" name="Flag Maneuver Completion" id="0x80">
+	<description>
+	  Command system to exit maneuver's execution.
+	</description>
+      </value>
+    </field>
+    <field name="Speed Reference" abbrev="speed" type="fp32_t">
+      <description>
+        The value of the desired speed, in the scale specified by the
+        "flags" field.
+      </description>
+    </field>
+    <field name="Z Reference" abbrev="z" type="fp32_t" unit="m">
+      <description>
+        The value of the desired z reference in meters.
+      </description>
+    </field>
+    <field name="Heading Reference" abbrev="heading" type="fp32_t" unit="rad">
+      <description>
+        The value of the desired heading angle, relative to true  north, in radians,
+	or, the value of the desired heading rate angle, in radians.
+      </description>
+    </field>
+  </message>
+
+  <message id="498" name="Follow Command State" abbrev="FollowCommandState" source="vehicle" category="Maneuvering">
+    <field name="Controlling Source" abbrev="control_src" type="uint16_t">
+      <description>
+        The IMC identifier of the source system that is allowed to control the vehicle.
+        If the value ''0xFFFF'' is used, any system is allowed to command references.
+      </description>
+    </field>
+    <field name="Controlling Entity" abbrev="control_ent" type="uint8_t">
+      <description>
+        The entity identifier of the entity that is allowed to control the vehicle.
+        If the value ''0xFF'' is used, any entity is allowed to command references.
+      </description>
+    </field>
+    <field name="Command" abbrev="command" type="message" message-type="Command">
+      <description>Command currently being followed.</description>
+    </field>
+    <field name="State" abbrev="state" type="uint8_t" unit="Enumerated" prefix="FC">
+      <description>
+	Current state of execution.
+      </description>
+      <value abbrev="WAIT" name="Waiting for first command" id="1">
+	<description>
+	  System is waiting for first command.
+	</description>
+      </value>
+      <value abbrev="MOVING" name="Moving towards received command" id="2">
+	<description>
+	  System is moving according with command provided.
+	</description>
+      </value>
+      <value abbrev="STOPPED" name="Speed command is zero" id="3">
+	<description>
+	  System is stopped. Speed reference is zero.
+	</description>
+      </value>
+      <value abbrev="BAD_COMMAND" name="Command is out of safe bounds" id="4">
+	<description>
+	  Command provided breaks system's physical limitations.
+	</description>
+      </value>
+      <value abbrev="TIMEOUT" name="Controlling system timed out" id="5">
+	<description>
+	  Maneuver will be terminated since timeout was exceeded.
+	</description>
+      </value>
+    </field>
+  </message>
+
+  <message id="499" name="Magnetometer Maneuver" abbrev="Magnetometer" source="ccu" category="Maneuvering">
+    <description>
+      Magnetometer calibration maneuver (i.e: one square pattern
+      in one direction, a second square in the opposite direction)
+    </description>
+    <field name="Timeout" abbrev="timeout" type="uint16_t" unit="s">
+      <description>
+        The amount of time the maneuver is allowed to run.
+      </description>
+    </field>
+    <field name="Latitude WGS-84" abbrev="lat" type="fp64_t" unit="rad" min="-1.5707963267948966" max="1.5707963267948966">
+      <description>
+        WGS-84 Latitude of target waypoint.
+      </description>
+    </field>
+    <field name="Longitude WGS-84" abbrev="lon" type="fp64_t" unit="rad" min="-3.141592653589793" max="3.141592653589793">
+      <description>
+        WGS-84 Longitude of target waypoint.
+      </description>
+    </field>
+    <field name="Z Reference" abbrev="z" type="fp32_t" unit="m">
+      <description>
+        Maneuver reference in the z axis. Use z_units to specify
+        whether z represents depth, altitude or other.
+      </description>
+    </field>
+    <field name="Z Units" abbrev="z_units" type="uint8_t" value="0" unit="Enumerated" enum-def="ZUnits">
+      <description>
+        Units of the z reference.
+      </description>
+    </field>
+    <field name="Speed" abbrev="speed" type="fp32_t">
+      <description>
+        Maneuver speed reference.
+      </description>
+    </field>
+    <field name="Speed Units" abbrev="speed_units" type="uint8_t" value="0" unit="Enumerated" enum-def="SpeedUnits">
+      <description>
+        Speed units.
+      </description>
+    </field>
+    <field name="Bearing" abbrev="bearing" type="fp64_t" unit="rad" min="0" max="6.283185307179586">
+      <description>
+        Rows bearing angle.
+      </description>
+    </field>
+    <field name="Width" abbrev="width" min="50" type="fp32_t" unit="m">
+      <description>
+        Width of the maneuver.
+      </description>
+    </field>
+    <field name="Direction" abbrev="direction" type="uint8_t" unit="Enumerated" prefix="MD" max="1">
+      <description>
+        Desired direction.
+      </description>
+      <value id="0" name="Clockwise First" abbrev="CLOCKW_FIRST"/>
+      <value id="1" name="Counter Clockwise First" abbrev="CCLOCKW_FIRST"/>
+    </field>
+    <field name="Custom settings for maneuver" abbrev="custom" unit="TupleList" type="plaintext">
+      <description>
+        Custom settings for maneuver.
+      </description>
+    </field>
+  </message>
+<?messages>
