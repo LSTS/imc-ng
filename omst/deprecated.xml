@@ -1,0 +1,22 @@
+<messages>
+    <message id="156" name="SMS" abbrev="Sms" source="vehicle" flags="deprecated" category="Networking">
+    <description>
+      Send a SMS message.
+    </description>
+    <field name="Number" abbrev="number" type="plaintext">
+      <description>
+        Target mobile device number.
+      </description>
+    </field>
+    <field name="Timeout" abbrev="timeout" type="uint16_t">
+      <description>
+        Timeout for sending message.
+      </description>
+    </field>
+    <field name="Contents" abbrev="contents" type="plaintext">
+      <description>
+        Message contents.
+      </description>
+    </field>
+  </message>
+</messages>

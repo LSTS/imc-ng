@@ -1,0 +1,253 @@
+<messages>
+    <!-- Storage -->
+    <message id="100" name="Storage Usage" abbrev="StorageUsage" source="vehicle" flags="periodic" category="Storage">
+        <description>
+        Report of storage usage.
+        </description>
+        <field name="Available" abbrev="available" type="uint32_t" unit="MiB">
+        <description>
+            The available storage of the reporting device.
+        </description>
+        </field>
+        <field name="Usage" abbrev="value" type="uint8_t" max="100" unit="%">
+        <description>
+            The percentage of storage used by the reporting device.
+        </description>
+        </field>
+    </message>
+
+    <message id="101" name="Cache Control" abbrev="CacheControl" source="vehicle,ccu" category="Storage">
+        <description>
+        Control caching of messages to persistent storage.
+        </description>
+        <field name="Control Operation" abbrev="op" type="uint8_t" unit="Enumerated" prefix="COP">
+        <description>
+            Operation to perform.
+        </description>
+        <value id="0" name="Store" abbrev="STORE"/>
+        <value id="1" name="Load" abbrev="LOAD"/>
+        <value id="2" name="Clear" abbrev="CLEAR"/>
+        <value id="3" name="Copy Snapshot" abbrev="COPY"/>
+        <value id="4" name="Snapshot Copy Complete" abbrev="COPY_COMPLETE"/>
+        </field>
+        <field name="Snapshot destination" abbrev="snapshot" type="plaintext">
+        <description>
+            Destination for the cache snapshot file.
+        </description>
+        </field>
+        <field name="Message" abbrev="message" type="message">
+        <description>
+            Message to store.
+        </description>
+        </field>
+    </message>
+
+    <message id="102" name="Logging Control" abbrev="LoggingControl" source="vehicle,ccu" category="Storage">
+        <description>
+        Control logging of messages to persistent storage.
+        </description>
+        <field name="Control Operation" abbrev="op" type="uint8_t" unit="Enumerated" prefix="COP">
+        <description>
+            Operation to perform.
+        </description>
+        <value id="0" name="Request Start of Logging" abbrev="REQUEST_START">
+            <description>
+            Request the logging manager to start logging. The logging
+            manager will reply with a STARTED operation. If logging is
+            already in progress the current log will be closed and a new
+            one will be opened (therefore the logging manager will send
+            two messages - STOPPED and STARTED). The field 'name'
+            represents the label that will be appended to the log path.
+            </description>
+        </value>
+        <value id="1" name="Logging Started" abbrev="STARTED">
+            <description>
+            The logging manager will send a message with this operation
+            everytime a log is successfully started. The field 'name'
+            contains the complete name of the log.
+            </description>
+        </value>
+        <value id="2" name="Request Logging Stop" abbrev="REQUEST_STOP">
+            <description>
+            Request the logging manager to stop logging messages. The
+            logging manager will reply with a STOPPED operation and
+            logging will be suspended until a message with operation
+            START is received. If logging is already stoppped the
+            logging manager will ignore this operation and will not
+            reply with a STOPPED operation. The field 'name' with this
+            operation type has no meaning.
+            </description>
+        </value>
+        <value id="3" name="Logging Stopped" abbrev="STOPPED">
+            <description>
+            The logging manager will send a message with this operation
+            when logging is successfully stopped. The field 'name'
+            contains the complete name of the log that was closed.
+            </description>
+        </value>
+        <value id="4" name="Request Current Log Name" abbrev="REQUEST_CURRENT_NAME">
+            <description>
+            This operation instructs the logging manager to send a
+            message with operation CURRENT_NAME containing the complete
+            name of the current log in the field 'name'. The field
+            'name' with this operation type has no meaning.
+            </description>
+        </value>
+        <value id="5" name="Current Log Name" abbrev="CURRENT_NAME">
+            <description>
+            The logging manager will send a message with this operation
+            when asked via the REQUEST_CURRENT_NAME operation. The field
+            'name' contains the complete name of the log.
+            </description>
+        </value>
+        </field>
+        <field name="Log Label / Path" abbrev="name" type="plaintext">
+        <description>
+            The meaning of this field depends on the operation and is
+            explained in the operation's description.
+        </description>
+        </field>
+    </message>
+
+    <message id="103" name="Log Book Entry" abbrev="LogBookEntry" source="vehicle,ccu" category="Storage">
+        <description>
+        Human readable message reporting an event of interest.
+        </description>
+        <field name="Type" abbrev="type" type="uint8_t" prefix="LBET" unit="Enumerated">
+        <description>
+            Type of message.
+        </description>
+        <value id="0" abbrev="INFO" name="Information"/>
+        <value id="1" abbrev="WARNING" name="Warning"/>
+        <value id="2" abbrev="ERROR" name="Error"/>
+        <value id="3" abbrev="CRITICAL" name="Critical"/>
+        <value id="4" abbrev="DEBUG" name="Debug"/>
+        </field>
+        <field name="Timestamp" abbrev="htime" type="fp64_t" unit="s">
+        <description>
+            Timestamp (Epoch time).
+        </description>
+        </field>
+        <field name="Context" abbrev="context" type="plaintext">
+        <description>
+            Message context.
+        </description>
+        </field>
+        <field name="Text" abbrev="text" type="plaintext">
+        <description>
+            Message text.
+        </description>
+        </field>
+    </message>
+
+    <message id="104" name="Log Book Control" abbrev="LogBookControl" source="ccu,vehicle" category="Storage">
+        <description>
+        Control history log.
+        </description>
+        <field name="Command" abbrev="command" prefix="LBC" type="uint8_t" unit="Enumerated">
+        <description>
+            Command to perform.
+        </description>
+        <value id="0" name="Get" abbrev="GET">
+            <description>
+            Retrieve log book entries.
+            </description>
+        </value>
+        <value id="1" name="Clear" abbrev="CLEAR">
+            <description>
+            Clear log book entries.
+            </description>
+        </value>
+        <value id="2" name="Get Errors" abbrev="GET_ERR">
+            <description>
+            Retrieve log book entries corresponding to errors.
+            </description>
+        </value>
+        <value id="3" name="Reply" abbrev="REPLY">
+            <description>
+            Reply to a GET command. Message argument is a MessageList
+            instance containing LogBookEntry messages.
+            </description>
+        </value>
+        </field>
+        <field name="Timestamp" abbrev="htime" type="fp64_t" unit="s">
+        <description>
+            Timestamp for command (Epoch time).
+        </description>
+        </field>
+        <field name="Messages" abbrev="msg" type="message-list" message-type="LogBookEntry">
+        <description>
+            Argument, currently used only for 'REPLY'.
+        </description>
+        </field>
+    </message>
+
+    <message id="105" name="Replay Control" abbrev="ReplayControl" category="Storage">
+        <description>Control replay of LSF logged data.</description>
+        <field name="Operation" abbrev="op" prefix="ROP" type="uint8_t" unit="Enumerated">
+        <description>
+            Operation to perform.
+        </description>
+        <value id="0" abbrev="START" name="Start"/>
+        <value id="1" abbrev="STOP" name="Stop"/>
+        <value id="2" abbrev="PAUSE" name="Pause"/>
+        <value id="3" abbrev="RESUME" name="Resume"/>
+        </field>
+        <field name="File To Replay" abbrev="file" type="plaintext">
+        <description>
+            Pathname of file to replay.
+        </description>
+        </field>
+    </message>
+
+    <message id="106" name="Clock Control" abbrev="ClockControl" used-by="vehicle,ccu" category="Storage">
+        <description>
+        Clock control.
+        </description>
+        <field name="Operation" abbrev="op" type="uint8_t" prefix="COP" unit="Enumerated">
+        <description>
+            Operation to perform.
+        </description>
+        <value id="0" name="Execute Sync." abbrev="SYNC_EXEC">
+            <description>
+            Synchronize clock according to given clock value.
+            </description>
+        </value>
+        <value id="1" name="Request Sync." abbrev="SYNC_REQUEST">
+            <description>
+            Request autonomous clock synchronization.
+            </description>
+        </value>
+        <value id="2" name="Sync. Started" abbrev="SYNC_STARTED">
+            <description>
+            Synchronization start notification.
+            </description>
+        </value>
+        <value id="3" name="Sync. done" abbrev="SYNC_DONE">
+            <description>
+            Synchronization completion notification.
+            </description>
+        </value>
+        <value id="4" name="Set Timezone " abbrev="SET_TZ">
+            <description>
+            Set timezone.
+            </description>
+        </value>
+        <value id="5" name="Timezone Setup" abbrev="SET_TZ_DONE">
+            <description>
+            Notification due to timezone modification.
+            </description>
+        </value>
+        </field>
+        <field name="Clock" abbrev="clock" type="fp64_t" unit="s">
+        <description>
+            Clock value (Epoch time).
+        </description>
+        </field>
+        <field name="Timezone" abbrev="tz" type="int8_t" min="-23" max="23">
+        <description>
+            Timezone.
+        </description>
+        </field>
+    </message>
+</messages

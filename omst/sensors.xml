@@ -1,0 +1,923 @@
+<messages>
+    <!-- Sensors -->
+    <message id="250" name="Revolutions Per Minute" abbrev="Rpm" source="vehicle" category="Sensors">
+        <description>
+        Number of revolutions per minute.
+        </description>
+        <field name="Value" abbrev="value" type="int16_t" unit="rpm">
+        <description>
+            Number of revolutions per minute.
+        </description>
+        </field>
+    </message>
+
+    <message id="251" name="Voltage" abbrev="Voltage" source="vehicle" flags="periodic" category="Sensors">
+        <description>
+        Report of electrical voltage.
+        </description>
+        <field name="Measured Voltage Value" abbrev="value" type="fp32_t" unit="V">
+        <description>
+            The value of the internal electrical voltage as measured by
+            the sensor.
+        </description>
+        </field>
+    </message>
+
+    <message id="252" name="Current" abbrev="Current" source="vehicle" flags="periodic" category="Sensors">
+        <description>
+        Report of electrical current.
+        </description>
+        <field name="Measured Current Value" abbrev="value" type="fp32_t" unit="A">
+        <description>
+            The value of the internal electrical current as measured by
+            the sensor.
+        </description>
+        </field>
+    </message>
+
+    <message id="253" name="GPS Fix" abbrev="GpsFix" source="vehicle" flags="periodic" category="Sensors">
+        <description>
+        Report of a GPS fix.
+        </description>
+        <field name="Validity" abbrev="validity" type="uint16_t" unit="Bitfield" prefix="GFV">
+        <description>
+            Validity of fields.
+        </description>
+        <value id="0x0001" name="Valid Date" abbrev="VALID_DATE">
+            <description>
+            Fields 'utc_year', 'utc_month' and 'utc_day' are valid.
+            </description>
+        </value>
+        <value id="0x0002" name="Valid Time" abbrev="VALID_TIME">
+            <description>
+            Field 'utc_time' is valid.
+            </description>
+        </value>
+        <value id="0x0004" name="Valid Position" abbrev="VALID_POS">
+            <description>
+            Fields 'lat', 'lon', 'altitude' and 'satellites' are valid.
+            </description>
+        </value>
+        <value id="0x0008" name="Valid Course Over Ground" abbrev="VALID_COG">
+            <description>
+            Field 'cog' is valid.
+            </description>
+        </value>
+        <value id="0x0010" name="Valid Speed Over Ground" abbrev="VALID_SOG">
+            <description>
+            Field 'sog' is valid.
+            </description>
+        </value>
+        <value id="0x0020" name="Valid Horizontal Accuracy Estimate" abbrev="VALID_HACC">
+            <description>
+            Field 'hacc' is valid.
+            </description>
+        </value>
+        <value id="0x0040" name="Valid Vertical Accuracy Estimate" abbrev="VALID_VACC">
+            <description>
+            Field 'vacc' is valid.
+            </description>
+        </value>
+        <value id="0x0080" name="Valid Horizontal Dilution of Precision" abbrev="VALID_HDOP">
+            <description>
+            Field 'hdop' is valid.
+            </description>
+        </value>
+        <value id="0x0100" name="Valid Vertical Dilution of Precision" abbrev="VALID_VDOP">
+            <description>
+            Field 'vdop' is valid.
+            </description>
+        </value>
+        </field>
+        <field name="Type" abbrev="type" type="uint8_t" unit="Enumerated" prefix="GFT">
+        <description>
+            Type of fix.
+        </description>
+        <value id="0x00" name="Stand Alone" abbrev="STANDALONE">
+            <description>
+            Stand alone solution.
+            </description>
+        </value>
+        <value id="0x01" name="Differential" abbrev="DIFFERENTIAL">
+            <description>
+            Differential solution.
+            </description>
+        </value>
+        <value id="0x02" name="Dead Reckoning" abbrev="DEAD_RECKONING">
+            <description>
+            Dead reckoning solution.
+            </description>
+        </value>
+        <value id="0x03" name="Manual Input" abbrev="MANUAL_INPUT">
+            <description>
+            Manual solution.
+            </description>
+        </value>
+        <value id="0x04" name="Simulation" abbrev="SIMULATION">
+            <description>
+            Simulated solution.
+            </description>
+        </value>
+        </field>
+        <field name="UTC Year" abbrev="utc_year" type="uint16_t">
+        <description>
+            UTC year.
+        </description>
+        </field>
+        <field name="UTC Month" abbrev="utc_month" type="uint8_t">
+        <description>
+            UTC month.
+        </description>
+        </field>
+        <field name="UTC Day" abbrev="utc_day" type="uint8_t">
+        <description>
+            UTC day.
+        </description>
+        </field>
+        <field name="UTC Time of Fix" abbrev="utc_time" type="fp32_t" unit="s">
+        <description>
+            UTC time of the GPS fix measured in seconds since 00:00:00 (midnight).
+        </description>
+        </field>
+        <field name="Latitude WGS-84" abbrev="lat" type="fp64_t" unit="rad" min="-1.5707963267948966" max="1.5707963267948966">
+        <description>
+            WGS-84 Latitude coordinate.
+        </description>
+        </field>
+        <field name="Longitude WGS-84" abbrev="lon" type="fp64_t" unit="rad" min="-3.141592653589793" max="3.141592653589793">
+        <description>
+            WGS-84 Longitude coordinate.
+        </description>
+        </field>
+        <field name="Height above WGS-84 ellipsoid" abbrev="height" type="fp32_t" unit="m">
+        <description>
+            Height above WGS-84 ellipsoid.
+        </description>
+        </field>
+        <field name="Number of Satellites" abbrev="satellites" type="uint8_t">
+        <description>
+            Number of satellites used by the GPS device to compute the
+            solution.
+        </description>
+        </field>
+        <field name="Course Over Ground" abbrev="cog" type="fp32_t" unit="rad">
+        <description>
+            Course Over Ground (true).
+        </description>
+        </field>
+        <field name="Speed Over Ground" abbrev="sog" type="fp32_t" unit="m/s">
+        <description>
+            Speed Over Ground.
+        </description>
+        </field>
+        <field name="Horizontal Dilution of Precision" abbrev="hdop" type="fp32_t">
+        <description>
+            Horizontal dilution of precision.
+        </description>
+        </field>
+        <field name="Vertical Dilution of Precision" abbrev="vdop" type="fp32_t">
+        <description>
+            Vertical dilution of precision.
+        </description>
+        </field>
+        <field name="Horizontal Accuracy Estimate" abbrev="hacc" type="fp32_t" unit="m">
+        <description>
+            Horizontal Accuracy Estimate.
+        </description>
+        </field>
+        <field name="Vertical Accuracy Estimate" abbrev="vacc" type="fp32_t" unit="m">
+        <description>
+            Vertical Accuracy Estimate.
+        </description>
+        </field>
+    </message>
+
+    <message id="254" name="Euler Angles" abbrev="EulerAngles" source="vehicle" flags="periodic" category="Sensors">
+        <description>
+        Report of spatial orientation according to SNAME's notation
+        (1950).
+        </description>
+        <field name="Device Time" abbrev="time" type="fp64_t" unit="s">
+        <description>
+            The device time.
+        </description>
+        </field>
+        <field name="Roll Angle" abbrev="phi" type="fp64_t" unit="rad" min="-3.141592653589793" max="3.141592653589793">
+        <description>
+            Rotation around the vehicle longitudinal axis.
+        </description>
+        </field>
+        <field name="Pitch Angle" abbrev="theta" type="fp64_t" unit="rad" min="-1.57079632679490" max="1.57079632679490">
+        <description>
+            Rotation around the vehicle lateral or transverse axis.
+        </description>
+        </field>
+        <field name="Yaw Angle (True)" abbrev="psi" type="fp64_t" unit="rad" min="-3.141592653589793" max="3.141592653589793">
+        <description>
+            Rotation around the vehicle vertical axis. A value of 0 means
+            the vehicle is oriented towards true north. In cases where the
+            sensor cannot measure the true heading, this field will have
+            the same value as Yaw (Magnetic).
+        </description>
+        </field>
+        <field name="Yaw Angle (Magnetic)" abbrev="psi_magnetic" type="fp64_t" unit="rad" min="-3.141592653589793" max="3.141592653589793">
+        <description>
+            Rotation around the vehicle vertical axis. A value of 0 means
+            the vehicle is oriented towards magnetic north. In cases where
+            the sensor cannot measure the magnetic heading, this field
+            will have the same value as Yaw (True).
+        </description>
+        </field>
+    </message>
+
+    <message id="255" name="Euler Angles Delta" abbrev="EulerAnglesDelta" source="vehicle" flags="periodic" category="Sensors">
+        <description>
+        Component of incremetal orientation vector over a period of time.
+        </description>
+        <field name="Device Time" abbrev="time" type="fp64_t" unit="s">
+        <description>
+            The device time.
+        </description>
+        </field>
+        <field name="X" abbrev="x" type="fp64_t" unit="rad">
+        <description>
+            X component.
+        </description>
+        </field>
+        <field name="Y" abbrev="y" type="fp64_t" unit="rad">
+        <description>
+            Y component.
+        </description>
+        </field>
+        <field name="Z" abbrev="z" type="fp64_t" unit="rad">
+        <description>
+            Z component.
+        </description>
+        </field>
+        <field name="Timestep" abbrev="timestep" type="fp32_t" unit="s">
+        <description>
+            Period of time of the orientation vector increments.
+        </description>
+        </field>
+    </message>
+
+    <message id="256" name="Angular Velocity" abbrev="AngularVelocity" source="vehicle" flags="periodic" category="Sensors">
+        <description>
+        Vector quantifying the direction and magnitude of the measured
+        angular velocity that a device is exposed to.
+        </description>
+        <field name="Device Time" abbrev="time" type="fp64_t" unit="s">
+        <description>
+            The device time.
+        </description>
+        </field>
+        <field name="X" abbrev="x" type="fp64_t" unit="rad/s">
+        <description>
+            X component.
+        </description>
+        </field>
+        <field name="Y" abbrev="y" type="fp64_t" unit="rad/s">
+        <description>
+            Y component.
+        </description>
+        </field>
+        <field name="Z" abbrev="z" type="fp64_t" unit="rad/s">
+        <description>
+            Z component.
+        </description>
+        </field>
+    </message>
+
+    <message id="257" name="Acceleration" abbrev="Acceleration" source="vehicle" flags="periodic" category="Sensors">
+        <description>
+        Vector quantifying the direction and magnitude of the measured
+        acceleration that a device is exposed to.
+        </description>
+        <field name="Device Time" abbrev="time" type="fp64_t" unit="s">
+        <description>
+            The device time.
+        </description>
+        </field>
+        <field name="X" abbrev="x" type="fp64_t" unit="m/s/s">
+        <description>
+            X component.
+        </description>
+        </field>
+        <field name="Y" abbrev="y" type="fp64_t" unit="m/s/s">
+        <description>
+            Y component.
+        </description>
+        </field>
+        <field name="Z" abbrev="z" type="fp64_t" unit="m/s/s">
+        <description>
+            Z component.
+        </description>
+        </field>
+    </message>
+
+    <message id="258" name="Magnetic Field" abbrev="MagneticField" source="vehicle" flags="periodic" category="Sensors">
+        <description>
+        Vector quantifying the direction and magnitude of the measured
+        magnetic field that a device is exposed to.
+        </description>
+        <field name="Device Time" abbrev="time" type="fp64_t" unit="s">
+        <description>
+            The device time.
+        </description>
+        </field>
+        <field name="X" abbrev="x" type="fp64_t" unit="G">
+        <description>
+            X component.
+        </description>
+        </field>
+        <field name="Y" abbrev="y" type="fp64_t" unit="G">
+        <description>
+            Y component.
+        </description>
+        </field>
+        <field name="Z" abbrev="z" type="fp64_t" unit="G">
+        <description>
+            Z component.
+        </description>
+        </field>
+    </message>
+
+    <message id="259" name="Ground Velocity" abbrev="GroundVelocity" source="vehicle" flags="periodic" category="Sensors">
+        <description>
+        Vector quantifying the direction and magnitude of the measured
+        velocity relative to the ground that a device is exposed to.
+        </description>
+        <field name="Validity" abbrev="validity" unit="Bitfield" type="uint8_t" prefix="VAL">
+        <description>
+            Each bit of this field represents if a given velocity
+            component is valid.
+        </description>
+        <value id="0x01" abbrev="VEL_X" name="X component is valid"/>
+        <value id="0x02" abbrev="VEL_Y" name="Y component is valid"/>
+        <value id="0x04" abbrev="VEL_Z" name="Z component is valid"/>
+        </field>
+        <field name="X" abbrev="x" type="fp64_t" unit="m/s">
+        <description>
+            X component.
+        </description>
+        </field>
+        <field name="Y" abbrev="y" type="fp64_t" unit="m/s">
+        <description>
+            Y component.
+        </description>
+        </field>
+        <field name="Z" abbrev="z" type="fp64_t" unit="m/s">
+        <description>
+            Z component.
+        </description>
+        </field>
+    </message>
+
+    <message id="260" name="Water Velocity" abbrev="WaterVelocity" source="vehicle" flags="periodic" category="Sensors">
+        <description>
+        Vector quantifying the direction and magnitude of the measured
+        velocity relative to the water that a device is exposed to.
+        </description>
+        <field name="Validity" abbrev="validity" unit="Bitfield" type="uint8_t" prefix="VAL">
+        <description>
+            Each bit of this field represents if a given velocity
+            component is valid.
+        </description>
+        <value id="0x01" abbrev="VEL_X" name="X component is valid"/>
+        <value id="0x02" abbrev="VEL_Y" name="Y component is valid"/>
+        <value id="0x04" abbrev="VEL_Z" name="Z component is valid"/>
+        </field>
+        <field name="X" abbrev="x" type="fp64_t" unit="m/s">
+        <description>
+            X component.
+        </description>
+        </field>
+        <field name="Y" abbrev="y" type="fp64_t" unit="m/s">
+        <description>
+            Y component.
+        </description>
+        </field>
+        <field name="Z" abbrev="z" type="fp64_t" unit="m/s">
+        <description>
+            Z component.
+        </description>
+        </field>
+    </message>
+
+    <message id="261" name="Velocity Delta" abbrev="VelocityDelta" source="vehicle" flags="periodic" category="Sensors">
+        <description>
+        Component of incremetal velocity vector.
+        </description>
+        <field name="Device Time" abbrev="time" type="fp64_t" unit="s">
+        <description>
+            The device time.
+        </description>
+        </field>
+        <field name="X" abbrev="x" type="fp64_t" unit="m/s">
+        <description>
+            X component.
+        </description>
+        </field>
+        <field name="Y" abbrev="y" type="fp64_t" unit="m/s">
+        <description>
+            Y component.
+        </description>
+        </field>
+        <field name="Z" abbrev="z" type="fp64_t" unit="m/s">
+        <description>
+            Z component.
+        </description>
+        </field>
+    </message>
+
+    <message id="262" name="Distance" abbrev="Distance" source="vehicle" flags="periodic" category="Sensors">
+        <description>
+        Distance measurement detected by the device.
+        </description>
+        <field name="Validity" abbrev="validity" type="uint8_t" unit="Enumerated" prefix="DV">
+        <description>
+            Validity of the measurement.
+        </description>
+        <value id="0" name="Invalid" abbrev="INVALID">
+            <description>
+            Measurement is invalid.
+            </description>
+        </value>
+        <value id="1" name="Valid" abbrev="VALID">
+            <description>
+            Measurement is valid.
+            </description>
+        </value>
+        </field>
+        <field name="Location" abbrev="location" type="message-list" message-type="DeviceState">
+        <description>
+            Device Location in the system.
+        </description>
+        </field>
+        <field name="Beam Configuration" abbrev="beam_config" type="message-list" message-type="BeamConfig">
+        <description>
+            Beam configuration of the device.
+        </description>
+        </field>
+        <field name="Measured Distance" abbrev="value" type="fp32_t" unit="m">
+        <description>
+            Measured distance.
+        </description>
+        </field>
+    </message>
+
+    <message id="263" name="Temperature" abbrev="Temperature" source="vehicle" flags="periodic" category="Sensors">
+        <description>
+        Report of temperature.
+        </description>
+        <field name="Measured Temperature" abbrev="value" type="fp32_t" unit="°C">
+        <description>
+            The value of the temperature as measured by the sensor.
+        </description>
+        </field>
+    </message>
+
+    <message id="264" name="Pressure" abbrev="Pressure" source="vehicle" flags="periodic" category="Sensors">
+        <description>
+        Report of external pressure.
+        </description>
+        <field name="Measured Pressure" abbrev="value" type="fp64_t" unit="hPa">
+        <description>
+            The value of the pressure as measured by the sensor.
+        </description>
+        </field>
+    </message>
+
+    <message id="265" name="Depth" abbrev="Depth" source="vehicle" flags="periodic" category="Sensors">
+        <description>
+        Depth report.
+        </description>
+        <field name="Measured Depth" abbrev="value" type="fp32_t" unit="m">
+        <description>
+            Depth value measured by a sensor.
+        </description>
+        </field>
+    </message>
+
+    <message id="267" name="Sound Speed" abbrev="SoundSpeed" source="vehicle" flags="periodic" category="Sensors">
+        <description>
+        Sound Speed report.
+        </description>
+        <field name="Computed Sound Speed" abbrev="value" type="fp32_t" unit="m/s">
+        <description>
+            Estimated sound speed. Negative values denote invalid estimates.
+        </description>
+        </field>
+    </message>
+
+    <message id="268" name="Water Density" abbrev="WaterDensity" source="vehicle" flags="periodic" category="Sensors">
+        <description>
+        Water Density report.
+        </description>
+        <field name="Computed Water Density" abbrev="value" type="fp32_t" unit="kg/m/m/m">
+        <description>
+            Computed Water Density.
+        </description>
+        </field>
+    </message>
+
+    <message id="269" name="Conductivity" abbrev="Conductivity" source="vehicle" flags="periodic" category="Sensors">
+        <description>
+        Report of conductivity.
+        </description>
+        <field name="Measured Conductivity" abbrev="value" type="fp32_t" unit="S/m">
+        <description>
+            The value of the conductivity as measured by the sensor.
+        </description>
+        </field>
+    </message>
+
+    <message id="270" name="Salinity" abbrev="Salinity" source="vehicle" flags="periodic" category="Sensors">
+        <description>
+        Report of salinity.
+        </description>
+        <field name="Measured Salinity" abbrev="value" type="fp32_t" unit="PSU">
+        <description>
+            The value of the salinity as measured by the sensor.
+        </description>
+        </field>
+    </message>
+
+    <message id="272" name="Relative Humidity" abbrev="RelativeHumidity" source="vehicle" flags="periodic" category="Sensors">
+        <description>
+        Measurement of relative humidity.
+        </description>
+        <field name="Relative Humidity Value" abbrev="value" type="fp32_t" min="0" max="100">
+        <description>
+            Value of relative humidity.
+        </description>
+        </field>
+    </message>
+
+    <message id="273" name="Device Data (Text)" abbrev="DevDataText" source="vehicle" category="Sensors">
+        <description>
+        Verbatim representation of device data in plain text format.
+        </description>
+        <field name="Value" abbrev="value" type="plaintext">
+        <description>
+            Plain text data as extracted directly from the device.
+        </description>
+        </field>
+    </message>
+
+    <message id="274" name="Device Data (Binary)" abbrev="DevDataBinary" source="vehicle" category="Sensors">
+        <description>
+        Verbatim representation of device data in binary format.
+        </description>
+        <field name="Value" abbrev="value" type="rawdata">
+        <description>
+            Raw binary data as extracted directly from the device.
+        </description>
+        </field>
+    </message>
+
+    <message id="276" name="Sonar Data" abbrev="SonarData" source="vehicle" flags="periodic" category="Sensors">
+        <description>
+        This message contains the data acquired by a single sonar
+        measurement.
+        </description>
+        <field name="Type" abbrev="type" type="uint8_t" unit="Enumerated" prefix="ST">
+        <description>
+            Type of sonar.
+        </description>
+        <value id="0" name="Sidescan" abbrev="SIDESCAN"/>
+        <value id="1" name="Echo Sounder" abbrev="ECHOSOUNDER"/>
+        <value id="2" name="Multibeam" abbrev="MULTIBEAM"/>
+        </field>
+        <field name="Frequency" abbrev="frequency" type="uint32_t" unit="Hz">
+        <description>
+            Operating frequency.
+        </description>
+        </field>
+        <field name="Minimum Range" abbrev="min_range" type="uint16_t" unit="m">
+        <description>
+            Minimum range.
+        </description>
+        </field>
+        <field name="Maximum Range" abbrev="max_range" type="uint16_t" unit="m">
+        <description>
+            Maximum range.
+        </description>
+        </field>
+        <field name="Bits Per Data Point" abbrev="bits_per_point" type="uint8_t" unit="bit">
+        <description>
+            Size of the data unit.
+        </description>
+        </field>
+        <field name="Scaling Factor" abbrev="scale_factor" type="fp32_t">
+        <description>
+            Scaling factor used to multiply each data unit to restore the
+            original floating point value.
+        </description>
+        </field>
+        <field name="Beam Configuration" abbrev="beam_config" type="message-list" message-type="BeamConfig">
+        <description>
+            Beam configuration of the device.
+        </description>
+        </field>
+        <field name="Data" abbrev="data" type="rawdata">
+        <description>
+            Data acquired by the measurement.
+        </description>
+        </field>
+    </message>
+
+    <message id="277" name="Pulse" abbrev="Pulse" source="vehicle,ccu" flags="periodic" category="Sensors">
+        <description>
+        Hardware pulse detection.
+        </description>
+    </message>
+
+    <message id="278" name="Pulse Detection Control" abbrev="PulseDetectionControl" source="vehicle,ccu" category="Sensors">
+        <description>
+        Control of hardware pulse detection.
+        </description>
+        <field name="Operation" abbrev="op" type="uint8_t" prefix="POP" unit="Enumerated">
+        <description>
+            Activate or deactivate hardware pulse detection.
+        </description>
+        <value id="0" abbrev="OFF" name="Pulse Detection OFF"/>
+        <value id="1" abbrev="ON" name="Pulse Detection ON"/>
+        </field>
+    </message>
+
+    <message id="279" name="Fuel Level" abbrev="FuelLevel" source="vehicle" flags="periodic" category="Sensors">
+        <description>
+        Report of fuel level.
+        </description>
+        <field name="Value" abbrev="value" type="fp32_t" unit="%" min="0" max="100">
+        <description>
+            Fuel level percentage of the system.
+        </description>
+        </field>
+        <field name="Confidence Level" abbrev="confidence" type="fp32_t" unit="%" min="0" max="100">
+        <description>
+            Percentage level of confidence in the estimation of the amount
+            of energy in the batteries.
+        </description>
+        </field>
+        <field name="Operation Modes" abbrev="opmodes" type="plaintext" unit="TupleList">
+        <description>
+            Operation mode name and the estimated time available in that
+            mode in hours. Example: "Motion=1.5"
+        </description>
+        </field>
+    </message>
+
+    <message id="281" name="Servo Position" abbrev="ServoPosition" source="vehicle" category="Sensors">
+        <description>
+        Actual position of a servo.
+        </description>
+        <field name="Identifier" abbrev="id" type="uint8_t">
+        <description>
+            Servo identifier.
+        </description>
+        </field>
+        <field name="Position" abbrev="value" type="fp32_t" unit="rad" min="-1.5707963267948966" max="1.5707963267948966">
+        <description>
+            Value of the servo position.
+        </description>
+        </field>
+    </message>
+
+    <message id="282" name="Device State" abbrev="DeviceState" source="vehicle" category="Sensors">
+        <description>
+        Location of a specific device in the system infrastructure.
+        </description>
+        <field name="Device Position - X" abbrev="x" type="fp32_t" unit="m">
+        <description>
+            Device's position over the X axis.
+        </description>
+        </field>
+        <field name="Device Position - Y" abbrev="y" type="fp32_t" unit="m">
+        <description>
+            Device's position over the Y axis.
+        </description>
+        </field>
+        <field name="Device Position - Z" abbrev="z" type="fp32_t" unit="m">
+        <description>
+            Device's position over the Z axis.
+        </description>
+        </field>
+        <field name="Device Rotation - X" abbrev="phi" type="fp32_t" unit="rad">
+        <description>
+            Device's rotation over the X axis.
+        </description>
+        </field>
+        <field name="Device Rotation - Y" abbrev="theta" type="fp32_t" unit="rad">
+        <description>
+            Device's rotation over the Y axis.
+        </description>
+        </field>
+        <field name="Device Rotation - Z" abbrev="psi" type="fp32_t" unit="rad">
+        <description>
+            Device's rotation over the Z axis.
+        </description>
+        </field>
+    </message>
+
+    <message id="283" name="Beam Configuration" abbrev="BeamConfig" source="vehicle" category="Sensors">
+        <description>
+        Beam configuration of the device.
+        </description>
+        <field name="Beam Width" abbrev="beam_width" type="fp32_t" unit="rad" min="0" max="3.141592653589793">
+        <description>
+            Beam width of the instrument. A negative number denotes that
+            this information is not available or is not applicable.
+        </description>
+        </field>
+        <field name="Beam Height" abbrev="beam_height" type="fp32_t" unit="rad" min="0" max="3.141592653589793">
+        <description>
+            Beam height of the instrument. A negative number denotes that
+            this information is not available or is not applicable.
+        </description>
+        </field>
+    </message>
+
+    <message id="284" name="Data Sanity" abbrev="DataSanity" category="Sensors">
+        <description>
+        Report sanity or lack of it in the data output by a sensor.
+        </description>
+        <field name="Sanity" abbrev="sane" type="uint8_t" unit="Enumerated" prefix="DS">
+        <description>
+            Whether the data is sane or not sane.
+        </description>
+        <value id="0" abbrev="SANE" name="Sane">
+            <description>
+            Data is sane.
+            </description>
+        </value>
+        <value id="1" abbrev="NOT_SANE" name="Not Sane">
+            <description>
+            Data is not sane.
+            </description>
+        </value>
+        </field>
+    </message>
+
+    <message id="285" name="Rhodamine Dye" abbrev="RhodamineDye" source="vehicle" flags="periodic" category="Sensors">
+        <description>
+        Rhodamine Dye measurement.
+        </description>
+        <field name="Value" abbrev="value" type="fp32_t" unit="PPB">
+        <description>
+            Amount of rhodamine dye detected.
+        </description>
+        </field>
+    </message>
+
+    <message id="286" name="Crude Oil" abbrev="CrudeOil" source="vehicle" flags="periodic" category="Sensors">
+        <description>
+        Crude oil measurement.
+        </description>
+        <field name="Value" abbrev="value" type="fp32_t" unit="PPB">
+        <description>
+            Amount of crude oil detected.
+        </description>
+        </field>
+    </message>
+
+    <message id="287" name="Fine Oil" abbrev="FineOil" source="vehicle" flags="periodic" category="Sensors">
+        <description>
+        Fine oil measurement.
+        </description>
+        <field name="Value" abbrev="value" type="fp32_t" unit="PPB">
+        <description>
+            Amount of fine oil detected.
+        </description>
+        </field>
+    </message>
+
+    <message id="288" name="Turbidity" abbrev="Turbidity" source="vehicle" flags="periodic" category="Sensors">
+        <description>
+        Turbidity measurement.
+        </description>
+        <field name="Value" abbrev="value" type="fp32_t" unit="NTU">
+        <description>
+            Turbidity reading.
+        </description>
+        </field>
+    </message>
+
+    <message id="289" name="Chlorophyll" abbrev="Chlorophyll" source="vehicle" flags="periodic" category="Sensors">
+        <description>
+        Chlorophyll measurement.
+        </description>
+        <field name="Value" abbrev="value" type="fp32_t" unit="µg/L">
+        <description>
+            Chlorophyll reading.
+        </description>
+        </field>
+    </message>
+
+    <message id="290" name="Fluorescein" abbrev="Fluorescein" source="vehicle" flags="periodic" category="Sensors">
+        <description>
+        Fluorescein measurement.
+        </description>
+        <field name="Value" abbrev="value" type="fp32_t" unit="PPB">
+        <description>
+            Fluorescein reading.
+        </description>
+        </field>
+    </message>
+
+    <message id="291" name="Phycocyanin" abbrev="Phycocyanin" source="vehicle" flags="periodic" category="Sensors">
+        <description>
+        Phycocyanin measurement.
+        </description>
+        <field name="Value" abbrev="value" type="fp32_t" unit="PPB">
+        <description>
+            Phycocyanin reading.
+        </description>
+        </field>
+    </message>
+
+    <message id="292" name="Phycoerythrin" abbrev="Phycoerythrin" source="vehicle" flags="periodic" category="Sensors">
+        <description>
+        Phycoerythrin measurement.
+        </description>
+        <field name="Value" abbrev="value" type="fp32_t" unit="PPB">
+        <description>
+            Phycoerythrin reading.
+        </description>
+        </field>
+    </message>
+
+    <message id="295" name="Dissolved Oxygen" abbrev="DissolvedOxygen" source="vehicle" flags="periodic" category="Sensors">
+        <description>
+        Dissolved Oxygen measurement.
+        </description>
+        <field name="Value" abbrev="value" type="fp32_t" unit="µM">
+        <description>
+            Dissolved Oxygen reading.
+        </description>
+        </field>
+    </message>
+
+    <message id="296" name="Air Saturation" abbrev="AirSaturation" source="vehicle" flags="periodic" category="Sensors">
+        <description>
+        Air Saturation measurement.
+        </description>
+        <field name="Value" abbrev="value" type="fp32_t" unit="%">
+        <description>
+            Air Saturation reading.
+        </description>
+        </field>
+    </message>
+
+    <message id="298" name="pH" abbrev="PH" source="vehicle" flags="periodic" category="Sensors">
+        <description>
+        Report of pH.
+        </description>
+        <field name="Value" abbrev="value" type="fp32_t">
+        <description>
+            The value of the pH as measured by the sensor.
+        </description>
+        </field>
+    </message>
+
+    <message id="299" name="Redox Potential" abbrev="Redox" source="vehicle" flags="periodic" category="Sensors">
+        <description>
+        Report of Redox Potential.
+        </description>
+        <field name="Value" abbrev="value" type="fp32_t" unit="V">
+        <description>
+            The value of the Redox as measured by the sensor.
+        </description>
+        </field>
+    </message>
+    <message id="903" name="Dissolved Organic Matter" abbrev="DissolvedOrganicMatter" source="vehicle" flags="periodic" category="Sensors">
+        <description>
+        Dissolved Organic Matter measurement.
+        </description>
+        <field name="Value" abbrev="value" type="fp32_t" unit="PPB">
+        <description>
+            Dissolved Organic Matter reading.
+        </description>
+        </field>
+        <field name="Type of measurement" abbrev="type" type="uint8_t" unit="Enumerated" prefix="DT">
+        <description>
+        Type of measurement.
+        </description>
+        <value id="0" abbrev="COLORED" name="Colored"/>
+        <value id="1" abbrev="FLUORESCENT" name="Fluorescent"/>
+        </field>
+    </message>
+
+    <message id="904" name="Optical Backscattering Coefficient" abbrev="OpticalBackscatter" source="vehicle" flags="periodic" category="Sensors">
+        <description>
+        The optical backscattering coefficient refers to all the photons that have been redirected in the backward directions
+        when a photon of light propagates in water and interacts with a "particle" (varying from water molecules to fish).
+        </description>
+        <field name="Value" abbrev="value" type="fp32_t" unit="1/m">
+        <description>
+            Optical Backscattering Coefficient.
+        </description>
+        </field>
+    </message>
+</messages>
