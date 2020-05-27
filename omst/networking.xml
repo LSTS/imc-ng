@@ -106,13 +106,15 @@
         </description>
         </field>
     </message>
-
     <message id="171" name="Transmit Iridium Message" abbrev="IridiumMsgTx" source="vehicle,ccu" category="Networking">
         <field name="Request Identifier" abbrev="req_id" type="uint16_t">
         <description>The request identifier used to receive transmission updates.</description>
         </field>
         <field name="Time to live" abbrev="ttl" type="uint16_t" unit="s">
         <description>Time, in seconds, after which there will be no more atempts to transmit the message.</description>
+        </field>
+        <field name="Expiration Time" abbrev="expiration" type="uint32_t" unit="s">
+        <description>Time in seconds since the Unix Epoch after which the recipient shall discard the message.</description>
         </field>
         <field name="Destination Identifier" abbrev="destination" type="plaintext">
         <description>The unique identifier of this message's destination (e.g. lauv-xtreme-2, manta-0).</description>
@@ -138,23 +140,6 @@
         <field name="Status Text" abbrev="text" type="plaintext"/>
     </message>
 
-    <message id="183" name="Extended Receive Signal Strength Information" abbrev="ExtendedRSSI" source="vehicle" category="Networking">
-        <description>
-        Measure of the RSSI by a networking device.
-        Indicates the gain or loss in the signal strenght due to the transmission
-        and reception equipment and the transmission medium and distance.
-        </description>
-        <field name="Value" abbrev="value" type="fp32_t">
-        <description>
-            RSSI measurement.
-        </description>
-        </field>
-        <field name="RSSI Units" abbrev="units" type="uint8_t" unit="Enumerated" enum-def="RSSIUnits">
-        <description>
-            Indicates the units used for the RSSI value.
-        </description>
-        </field>
-    </message>
     <message id="877" name="Message Fragment" abbrev="MessagePart" category="Networking">
         <field name="Transmission Unique Id" abbrev="uid" type="uint8_t"/>
         <field name="Fragment Number" abbrev="frag_number" type="uint8_t"/>
@@ -630,88 +615,6 @@
         This message contains information, collected using USBL, about the
         bearing and elevation of a target.
         </description>
-        <field name="Target" abbrev="target" type="uint16_t">
-        <description>
-            Target's IMC address.
-        </description>
-        </field>
-        <field name="Bearing" abbrev="bearing" type="fp32_t" unit="rad">
-        <description>
-            Target's bearing.
-        </description>
-        </field>
-        <field name="Elevation" abbrev="elevation" type="fp32_t" unit="rad">
-        <description>
-            Target's elevation.
-        </description>
-        </field>
-    </message>
-
-    <message id="891" name="USBL Position" abbrev="UsblPosition" category="Acoustic Communication">
-        <description>
-        This message contains information, collected using USBL, about a
-        target's position.
-        </description>
-        <field name="Target" abbrev="target" type="uint16_t">
-        <description>
-            Target's IMC address.
-        </description>
-        </field>
-        <field name="X" abbrev="x" type="fp32_t" unit="m">
-        <description>
-            X coordinate of the target in the local device's reference frame.
-        </description>
-        </field>
-        <field name="Y" abbrev="y" type="fp32_t" unit="m">
-        <description>
-            Y coordinate of the target in the local device's reference frame.
-        </description>
-        </field>
-        <field name="Z" abbrev="z" type="fp32_t" unit="m">
-        <description>
-            Z coordinate of the target in the local device's reference frame.
-        </description>
-        </field>
-    </message>
-
-    <message id="892" name="USBL Fix" abbrev="UsblFix" category="Acoustic Communication">
-        <description>
-        This message contains the WGS-84 position of a target computed using
-        USBL.
-        </description>
-        <field name="Target" abbrev="target" type="uint16_t">
-        <description>
-            Target's IMC address.
-        </description>
-        </field>
-        <field name="Latitude (WGS-84)" abbrev="lat" type="fp64_t" unit="rad" min="-1.5707963267948966" max="1.5707963267948966">
-        <description>
-            WGS-84 Latitude.
-        </description>
-        </field>
-        <field name="Longitude (WGS-84)" abbrev="lon" type="fp64_t" unit="rad" min="-3.141592653589793" max="3.141592653589793">
-        <description>
-            WGS-84 Longitude.
-        </description>
-        </field>
-        <field name="Z Units" abbrev="z_units" type="uint8_t" value="0" unit="Enumerated" enum-def="ZUnits">
-        <description>
-            Units of the z reference.
-        </description>
-        </field>
-        <field name="Z Reference" abbrev="z" type="fp32_t" unit="m">
-        <description>
-            Target reference in the z axis. Use z_units to specify
-            whether z represents depth, altitude or other.
-        </description>
-        </field>
-    </message>
-
-    <message id="898" name="USBL Angles Extended" abbrev="UsblAnglesExtended" category="Acoustic Communication">
-        <description>
-        This message contains information, collected using USBL, about the
-        bearing and elevation of a target.
-        </description>
         <field name="Target" abbrev="target" type="plaintext">
         <description>
             Target's system name.
@@ -759,7 +662,7 @@
         </field>
     </message>
 
-    <message id="899" name="USBL Position Extended" abbrev="UsblPositionExtended" category="Acoustic Communication">
+    <message id="891" name="USBL Position" abbrev="UsblPosition" category="Acoustic Communication">
         <description>
         This message contains information, collected using USBL, about a
         target's position.
@@ -821,7 +724,7 @@
         </field>
     </message>
 
-    <message id="900" name="USBL Fix Extended" abbrev="UsblFixExtended" category="Acoustic Communication">
+    <message id="892" name="USBL Fix" abbrev="UsblFix" category="Acoustic Communication">
         <description>
         This message contains the WGS-84 position of a target computed using
         USBL.
