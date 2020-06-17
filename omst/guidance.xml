@@ -1,0 +1,518 @@
+<messages>
+<!-- Guidance -->
+  <message id="400" name="Desired Heading" abbrev="DesiredHeading"  source="vehicle" category="Guidance">
+    <description>
+      Desired Heading angle reference value for the control layer.
+    </description>
+    <field name="Value" abbrev="value" type="fp64_t" unit="rad">
+      <description>
+        The value of the desired heading angle, relative to true
+        north, in radians.
+      </description>
+    </field>
+  </message>
+
+  <message id="401" name="Desired Z" abbrev="DesiredZ"  source="vehicle" category="Guidance">
+    <description>
+      Desired Z reference value for the control layer.
+    </description>
+    <field name="Value" abbrev="value" type="fp32_t" unit="m">
+      <description>
+        The value of the desired z reference in meters.
+      </description>
+    </field>
+    <field name="Z Units" abbrev="z_units" type="uint8_t" value="0" unit="Enumerated" enum-def="ZUnits">
+      <description>
+        Units of the z reference.
+      </description>
+    </field>
+  </message>
+
+  <message id="402" name="Desired Speed" abbrev="DesiredSpeed"  source="vehicle" category="Guidance">
+    <description>
+      Desired Speed reference value for the control layer.
+    </description>
+    <field name="Value" abbrev="value" type="fp64_t">
+      <description>
+        The value of the desired speed, in the scale specified by the
+        "Speed Units" field.
+      </description>
+    </field>
+    <field name="Speed Units" abbrev="speed_units" type="uint8_t" unit="Enumerated" enum-def="SpeedUnits">
+      <description>
+        Indicates the units used for the speed value.
+      </description>
+    </field>
+  </message>
+
+  <message id="403" name="Desired Roll" abbrev="DesiredRoll" source="vehicle" category="Guidance">
+    <description>
+      Desired Roll angle reference value for the control layer.
+    </description>
+    <field name="Value" abbrev="value" type="fp64_t" unit="rad">
+      <description>
+        The value of the desired roll angle.
+      </description>
+    </field>
+  </message>
+
+  <message id="404" name="Desired Pitch" abbrev="DesiredPitch" source="vehicle" category="Guidance">
+    <description>
+      Desired Pitch angle reference value for the control layer.
+    </description>
+    <field name="Value" abbrev="value" type="fp64_t" unit="rad">
+      <description>
+        The value of the desired pitch angle.
+      </description>
+    </field>
+  </message>
+
+  <message id="406" name="Desired Path" abbrev="DesiredPath" source="vehicle" category="Guidance">
+    <description>
+      Perform path control.
+
+      The path is specified by two WGS-84 waypoints, respective
+      altitude / depth settings, optional loitering at the end point,
+      and some control flags.
+
+      The start and end waypoints are defined by the specified end point fields
+      ('end_{lat/lon/z}') plus:
+
+      1. the start waypoint fields ('start_{lat|lon|z}') if the
+      'START' flag (bit in 'flags' field) is set; or
+      2. the end point of the previous path recently tracked; or
+      3. the current location is the 'DIRECT' flag is set or if
+      the tracker has been idle for some time.
+
+      Altitude and depth control can be performed as follows:
+
+      1. by default, the tracker will just transmit an altitude/depth
+      reference value equal to 'end_z' to the appropriate controller;
+      2. if the 'NO_Z' flag is set no altitude/depth control will take
+      place, hence they can be controlled independently;
+      3. if the '3DTRACK' flag is set, 3D-tracking will be done
+      (if supported by the active controller).
+
+      Loitering can be specified at the end point with a certain
+      radius ('lradius'), duration ('lduration'), and clockwise or
+      counter-clockwise direction ('CCLOCKW' flag).
+    </description>
+    <field name = "Path Reference" abbrev="path_ref" type="uint32_t">
+      <description>
+        Unsigned integer reference for the scope of the desired path message.
+        Path reference should only be set by a maneuver.
+        Should be set to an always increasing reference at the time of dispatching this message.
+        Lower level path controllers must inherit the same path reference sent by maneuver.
+      </description>
+    </field>
+    <field name="Start Point -- Latitude WGS-84" abbrev="start_lat" type="fp64_t" unit="rad" min="-1.5707963267948966" max="1.5707963267948966">
+      <description>
+        WGS-84 latitude of start point. This will be ignored unless
+        the 'START' flag is set.
+      </description>
+    </field>
+    <field name="Start Point -- WGS-84 Longitude" abbrev="start_lon" type="fp64_t" unit="rad" min="-3.141592653589793" max="3.141592653589793">
+      <description>
+        WGS-84 longitude of start point. This will be ignored unless
+        the 'START' flag is set.
+      </description>
+    </field>
+    <field name="Start Point -- Z Reference" abbrev="start_z" type="fp32_t" unit="m">
+      <description>
+        Altitude or depth of start point. This parameter will be
+        ignored if the 'NO_Z' flag is set, or if the 'START' flag is
+        not set.
+      </description>
+    </field>
+    <field name="Start Point -- Z Units" abbrev="start_z_units" type="uint8_t" value="0" unit="Enumerated" enum-def="ZUnits">
+      <description>
+        Units of the start point's z reference.
+      </description>
+    </field>
+    <field name="End Point -- WGS84 Latitude" abbrev="end_lat" type="fp64_t" unit="rad" min="-1.5707963267948966" max="1.5707963267948966">
+      <description>
+        WGS-84 latitude of end point.
+      </description>
+    </field>
+    <field name="End Point -- WGS-84 Longitude" abbrev="end_lon" type="fp64_t" unit="rad" min="-3.141592653589793" max="3.141592653589793">
+      <description>
+        WGS-84 longitude of end point.
+      </description>
+    </field>
+    <field name="End Point -- Z Reference" abbrev="end_z" type="fp32_t" unit="m">
+      <description>
+        Depth or altitude for the end point. This parameter will be
+        ignored if the 'NO_Z' flag is set.
+      </description>
+    </field>
+    <field name="End Point -- Z Units" abbrev="end_z_units" type="uint8_t" value="0" unit="Enumerated" enum-def="ZUnits">
+      <description>
+        Units of the end point's z reference.
+      </description>
+    </field>
+    <field name="Speed" abbrev="speed" type="fp32_t">
+      <description>
+        Maneuver speed reference.
+      </description>
+    </field>
+    <field name="Speed Units" abbrev="speed_units" type="uint8_t" value="0" unit="Enumerated" enum-def="SpeedUnits">
+      <description>
+        Speed units.
+      </description>
+    </field>
+    <field name="Loiter -- Radius" abbrev="lradius" type="fp32_t" unit="m">
+      <description>
+        Radius for loitering at end point. Specify less or equal to 0
+        for no loitering.
+      </description>
+    </field>
+    <field name="Flags" abbrev="flags" type="uint8_t" unit="Bitfield" prefix="FL">
+      <description>
+        Desired Path flags.
+      </description>
+      <value id="0x01" abbrev="START" name="Start Point">
+        <description>
+          Indicates that the start point specification is given,
+          therefore it should be considered for tracking.
+        </description>
+      </value>
+      <value id="0x02" abbrev="DIRECT" name="Direct">
+        <description>
+          If start point is not given, ignore also the previous path's
+          endpoint and take the start point to be the current vehicle
+          location.
+        </description>
+      </value>
+      <value id="0x04" abbrev="NO_Z" name="No Altitude/Depth control">
+        <description>
+          Ignore altitude/depth setting and let them be controlled
+          independently.
+        </description>
+      </value>
+      <value id="0x08" abbrev="3DTRACK" name="3D Tracking">
+        <description>
+          Perform 3D-tracking, i.e., consider the path formed in the
+          XYZ plane taking into account both the 'start_z' and 'end_z'
+          values.
+        </description>
+      </value>
+      <value id="0x10" abbrev="CCLOCKW" name="Counter-Clockwise loiter">
+        <description>
+          Indicates that loitering, if defined, should be done
+          counter-clockwise. Clockwise loitering will apply
+          otherwise.
+        </description>
+      </value>
+      <value id="0x20" abbrev="LOITER_CURR" name="Loiter from current position">
+        <description>
+          Indicates that loitering, if defined, should be done from
+          the current vehicle position. The end_lat and end_lon
+          fields will be ignored.
+        </description>
+      </value>
+      <value id="0x40" abbrev="TAKEOFF" name="Takeoff">
+        <description>
+          Indicates that takeoff should be done before going to the end position.
+        </description>
+      </value>
+      <value id="0x80" abbrev="LAND" name="Land">
+        <description>
+          Indicates that the system should land at the end position.
+        </description>
+      </value>
+    </field>
+  </message>
+
+  <message id="407" name="Desired Control" abbrev="DesiredControl" source="vehicle" category="Guidance">
+    <description>
+      Set the desired virtual forces and torques to be applied to the
+      vehicle.
+    </description>
+    <field name="Force along the x axis" abbrev="x" type="fp64_t" unit="N">
+      <description>
+        Force X along the vehicle's x axis.
+      </description>
+    </field>
+    <field name="Force along the y axis" abbrev="y" type="fp64_t" unit="N">
+      <description>
+        Force Y along the vehicle's y axis.
+      </description>
+    </field>
+    <field name="Force along the z axis" abbrev="z" type="fp64_t" unit="N">
+      <description>
+        Force Z along the vehicle's z axis.
+      </description>
+    </field>
+    <field name="Torque about the x axis" abbrev="k" type="fp64_t" unit="Nm">
+      <description>
+        Torque K about the vehicle's x axis.
+      </description>
+    </field>
+    <field name="Torque about the y axis" abbrev="m" type="fp64_t" unit="Nm">
+      <description>
+        Torque M about the vehicle's y axis.
+      </description>
+    </field>
+    <field name="Torque about the z axis" abbrev="n" type="fp64_t" unit="Nm">
+      <description>
+        Torque N about the vehicle's z axis.
+      </description>
+    </field>
+    <field name="Flags" abbrev="flags" type="uint8_t" unit="Bitfield" prefix="FL">
+      <description>
+        Desired Control flags.
+      </description>
+      <value id="0x01" abbrev="X" name="Value of X is meaningful">
+        <description>
+          If enabled then field X has a meaningful value.
+        </description>
+      </value>
+      <value id="0x02" abbrev="Y" name="Value of Y is meaningful">
+        <description>
+          If enabled then field Y has a meaningful value.
+        </description>
+      </value>
+      <value id="0x04" abbrev="Z" name="Value of Z is meaningful">
+        <description>
+          If enabled then field Z has a meaningful value.
+        </description>
+      </value>
+      <value id="0x08" abbrev="K" name="Value of K is meaningful">
+        <description>
+          If enabled then field K has a meaningful value.
+        </description>
+      </value>
+      <value id="0x10" abbrev="M" name="Value of M is meaningful">
+        <description>
+          If enabled then field M has a meaningful value.
+        </description>
+      </value>
+      <value id="0x20" abbrev="N" name="Value of N is meaningful">
+        <description>
+          If enabled then field N has a meaningful value.
+        </description>
+      </value>
+    </field>
+  </message>
+
+  <message id="408" name="Desired Heading Rate" abbrev="DesiredHeadingRate" source="vehicle" category="Guidance">
+    <description>
+      Desired Heading Rate speed reference value for the control layer.
+    </description>
+    <field name="Value" abbrev="value" type="fp64_t" unit="rad/s">
+      <description>
+        The value of the desired heading rate speed in radians per
+        second.
+      </description>
+    </field>
+  </message>
+
+  <message id="410" name="Path Control State" abbrev="PathControlState" source="vehicle" category="Guidance">
+    <description>
+      Path control state issued by Path Controller.
+    </description>
+    <field name = "Path Reference" abbrev="path_ref" type="uint32_t">
+      <description>
+        Unsigned integer reference of the desired path message to which this
+        PathControlState message refers to.
+        Path reference should only be set by a maneuver, not by path controllers.
+      </description>
+    </field>
+    <field name="Start Point -- Latitude WGS-84" abbrev="start_lat" type="fp64_t" unit="rad" min="-1.5707963267948966" max="1.5707963267948966">
+      <description>
+        WGS-84 latitude of start point.
+      </description>
+    </field>
+    <field name="Start Point -- WGS-84 Longitude" abbrev="start_lon" type="fp64_t" unit="rad" min="-3.141592653589793" max="3.141592653589793">
+      <description>
+        WGS-84 longitude of start point.
+      </description>
+    </field>
+    <field name="Start Point -- Z Reference" abbrev="start_z" type="fp32_t" unit="m">
+      <description>
+        Altitude or depth of start point. This parameter will be
+        ignored if the 'NO_Z' flag is set, or if the 'START' flag is
+        not set.
+      </description>
+    </field>
+    <field name="Start Point -- Z Units" abbrev="start_z_units" type="uint8_t" value="0" unit="Enumerated" enum-def="ZUnits">
+      <description>
+        Units of the start point's z reference.
+      </description>
+    </field>
+    <field name="End Point -- Latitude WGS-84" abbrev="end_lat" type="fp64_t" unit="rad" min="-1.5707963267948966" max="1.5707963267948966">
+      <description>
+        WGS-84 latitude of end point.
+      </description>
+    </field>
+    <field name="End Point -- WGS-84 Longitude" abbrev="end_lon" type="fp64_t" unit="rad" min="-3.141592653589793" max="3.141592653589793">
+      <description>
+        WGS-84 longitude of end point.
+      </description>
+    </field>
+    <field name="End Point -- Z Reference" abbrev="end_z" type="fp32_t" unit="m">
+      <description>
+        Depth or altitude for the end point. This parameter should be
+        ignored if the 'NO_Z' flag is set.
+      </description>
+    </field>
+    <field name="End Point -- Z Units" abbrev="end_z_units" type="uint8_t" value="0" unit="Enumerated" enum-def="ZUnits">
+      <description>
+        Units of the end point's z reference.
+      </description>
+    </field>
+    <field name="Loiter -- Radius" abbrev="lradius" type="fp32_t" unit="m">
+      <description>
+        Radius for loitering at end point.
+        Will be 0 if no loitering is active.
+      </description>
+    </field>
+    <field name="Flags" abbrev="flags" type="uint8_t" unit="Bitfield" prefix="FL">
+      <description>
+        Path control state flags.
+      </description>
+      <value id="0x01" abbrev="NEAR" name="Near Endpoint">
+        <description>
+          Set if near the target endpoint.
+        </description>
+      </value>
+      <value id="0x02" abbrev="LOITERING" name="Loitering">
+        <description>
+          Set if loitering.
+        </description>
+      </value>
+      <value id="0x04" abbrev="NO_Z" name="No Altitude/Depth control">
+        <description>
+          Altitude/depth being controlled independently.
+        </description>
+      </value>
+      <value id="0x08" abbrev="3DTRACK" name="3D Tracking">
+        <description>
+          3D-tracking is active.
+        </description>
+      </value>
+      <value id="0x10" abbrev="CCLOCKW" name="Counter-Clockwise loiter">
+        <description>
+          Indicates that loitering, if active, is being done
+          counter-clockwise. Otherwise, clockwise loitering should be
+          assumed.
+        </description>
+      </value>
+    </field>
+    <field name="Along Track Position" abbrev="x" unit="m" type="fp32_t">
+      <description>
+        Along-Track position value.
+      </description>
+    </field>
+    <field name="Cross Track Position" abbrev="y" unit="m" type="fp32_t">
+      <description>
+        Cross-Track position value.
+      </description>
+    </field>
+    <field name="Vertical Track Position" abbrev="z" unit="m" type="fp32_t">
+      <description>
+        Vertical-Track position value.
+      </description>
+    </field>
+    <field name="Along Track Velocity" abbrev="vx" unit="m/s" type="fp32_t">
+      <description>
+        Along-Track velocity value.
+      </description>
+    </field>
+    <field name="Cross Track Velocity" abbrev="vy" unit="m/s" type="fp32_t">
+      <description>
+        Cross-Track velocity value.
+      </description>
+    </field>
+    <field name="Vertical Track Velocity" abbrev="vz" unit="m/s" type="fp32_t">
+      <description>
+        Vertical-Track velocity value.
+      </description>
+    </field>
+    <field name="Course Error" abbrev="course_error" unit="rad" type="fp32_t">
+      <description>
+        Course error value.
+      </description>
+    </field>
+    <field name="Estimated Time to Arrival (ETA)" abbrev="eta" unit="s" type="uint16_t">
+      <description>
+        Estimated time to reach target waypoint. The value will be
+        65535 if the time is unknown or undefined, and 0 when
+        loitering.
+      </description>
+    </field>
+  </message>
+
+  <message id="411" name="Allocated Control Torques" abbrev="AllocatedControlTorques" source="vehicle" category="Guidance">
+    <description>
+      Control torques allocated to the actuators.
+    </description>
+    <field name="Torque about the x axis" abbrev="k" type="fp64_t" unit="Nm">
+      <description>
+        Torque K about the vehicle's x axis.
+      </description>
+    </field>
+    <field name="Torque about the y axis" abbrev="m" type="fp64_t" unit="Nm">
+      <description>
+        Torque M about the vehicle's y axis.
+      </description>
+    </field>
+    <field name="Torque about the x axis" abbrev="n" type="fp64_t" unit="Nm">
+      <description>
+        Torque N about the vehicle's z axis.
+      </description>
+    </field>
+  </message>
+
+  <message id="412" name="Control Parcel" abbrev="ControlParcel" category="Guidance">
+    <description>
+      Report of PID control parcels.
+    </description>
+    <field name="Proportional Parcel" abbrev="p" type="fp32_t">
+      <description>
+        Proportional parcel value.
+      </description>
+    </field>
+    <field name="Integrative Parcel" abbrev="i" type="fp32_t">
+      <description>
+        Integral parcel value.
+      </description>
+    </field>
+    <field name="Derivative Parcel" abbrev="d" type="fp32_t">
+      <description>
+        Derivative parcel value.
+      </description>
+    </field>
+    <field name="Anti-Windup Parcel" abbrev="a" type="fp32_t">
+      <description>
+        Anti-windup parcel value.
+      </description>
+    </field>
+  </message>
+
+  <message id="413" name="Brake" abbrev="Brake" category="Guidance">
+    <description>
+      Brake the vehicle in some way, i. e., reduce forward speed.
+    </description>
+    <field name="Operation" abbrev="op" type="uint8_t" unit="Enumerated" prefix="OP">
+      <description>
+        Brake operation.
+      </description>
+      <value id="0" abbrev="STOP" name="Stop Braking">
+        <description>
+          Stop braking procedures.
+        </description>
+      </value>
+      <value id="1" abbrev="START" name="Start Braking">
+        <description>
+          Start braking procedures.
+        </description>
+      </value>
+      <value id="2" abbrev="REVERT" name="Revert Actuation">
+        <description>
+          Revert Actuation.
+        </description>
+      </value>
+    </field>
+  </message>
+</messages>

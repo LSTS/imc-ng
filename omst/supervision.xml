@@ -1,0 +1,1118 @@
+<messages>
+<!-- Vehicle Supervision -->
+  <message id="500" name="Vehicle State" abbrev="VehicleState" source="vehicle" category="Vehicle Supervision">
+    <description>
+      This message summarizes the overall state of the vehicle. It can
+      contains information regarding:
+
+      - The overall operation mode.
+      - Any error conditions.
+      - Current maneuver execution.
+      - Active control loops.
+    </description>
+    <field name="Operation Mode" abbrev="op_mode" type="uint8_t" unit="Enumerated" prefix="VS">
+      <description>
+        The overall operation mode.
+      </description>
+      <value id="0" name="Service" abbrev="SERVICE">
+        <description>
+          Ready to service requests.
+        </description>
+      </value>
+      <value id="1" name="Calibration" abbrev="CALIBRATION">
+        <description>
+          Ongoing vehicle calibration.
+        </description>
+      </value>
+      <value id="2" name="Error" abbrev="ERROR">
+        <description>
+          Errors are set.
+        </description>
+      </value>
+      <value id="3" name="Maneuver" abbrev="MANEUVER">
+        <description>
+          A maneuver is executing.
+        </description>
+      </value>
+      <value id="4" name="External Control" abbrev="EXTERNAL">
+        <description>
+          External control is active.
+        </description>
+      </value>
+      <value id="5" name="Boot" abbrev="BOOT">
+        <description>
+          Booting system.
+        </description>
+      </value>
+    </field>
+    <field name="Errors -- Count" abbrev="error_count" type="uint8_t">
+      <description>
+        Error count for monitored entitites.
+      </description>
+    </field>
+    <field name="Errors -- Entities" abbrev="error_ents" type="plaintext">
+      <description>
+        The monitored entities with error conditions. This is a comma
+        separated list of entity names.
+      </description>
+    </field>
+    <field name="Maneuver -- Type" abbrev="maneuver_type" type="uint16_t">
+      <description>
+        Type of maneuver being executed, when in MANEUVER mode. The
+        value is the IMC serialization ID of the corresponding
+        maneuver.
+      </description>
+    </field>
+    <field name="Maneuver -- Start Time" abbrev="maneuver_stime" type="fp64_t" unit="s">
+      <description>
+        Start time of maneuver being executed (Epoch time), when in
+        MANEUVER mode.
+      </description>
+    </field>
+    <field name="Maneuver -- ETA" abbrev="maneuver_eta" type="uint16_t" unit="s">
+      <description>
+        Estimated time for maneuver completion. The value will be
+        65535 if the time is unknown or undefined.
+      </description>
+    </field>
+    <field name="Control Loops" abbrev="control_loops" type="uint32_t" unit="Bitfield" bitfield-def="CLoopsMask">
+      <description>
+        Enabled control loops.
+      </description>
+    </field>
+    <field name="Flags" abbrev="flags" type="uint8_t" prefix="VFLG" unit="Bitfield">
+      <value id="0x01" abbrev="MANEUVER_DONE" name="Maneuver Done"/>
+    </field>
+    <field name="Last Error -- Description" abbrev="last_error" type="plaintext">
+      <description>
+        Description of last error.
+      </description>
+    </field>
+    <field name="Last Error -- Time" abbrev="last_error_time" type="fp64_t" unit="s">
+      <description>
+        Time of last error (Epoch time).
+      </description>
+    </field>
+  </message>
+
+  <message id="501" name="Vehicle Command" abbrev="VehicleCommand" source="ccu,vehicle" category="Vehicle Supervision">
+    <description>
+      Vehicle command.
+    </description>
+    <field name="Type" abbrev="type" type="uint8_t" unit="Enumerated" prefix="VC">
+      <value id="0" abbrev="REQUEST" name="Request"/>
+      <value id="1" abbrev="SUCCESS" name="Reply -- Success"/>
+      <value id="2" abbrev="IN_PROGRESS" name="Reply -- In Progress"/>
+      <value id="3" abbrev="FAILURE" name="Reply -- Failure"/>
+    </field>
+    <field name="Request ID" abbrev="request_id" type="uint16_t">
+      <description>Request ID</description>
+    </field>
+    <field name="Command" abbrev="command" type="uint8_t" unit="Enumerated" prefix="VC">
+      <description>The type of command/action to be performed</description>
+      <value id="0" name="Execute Maneuver" abbrev="EXEC_MANEUVER">
+        <description>Execute the maneuver specified in 'maneuver' field.</description>
+      </value>
+      <value id="1" name="Stop Maneuver" abbrev="STOP_MANEUVER">
+        <description>Stop 'maneuver' being executed.</description>
+      </value>
+      <value id="2" name="Start Calibration" abbrev="START_CALIBRATION">
+        <description>Start calibrating vehicle.</description>
+      </value>
+      <value id="3" name="Stop Calibration" abbrev="STOP_CALIBRATION">
+        <description>Stop calibrating vehicle.</description>
+      </value>
+    </field>
+    <field name="Maneuver" abbrev="maneuver" type="message" message-type="Maneuver">
+      <description>Maneuver to be executed (for 'EXEC_MANEUVER' command)</description>
+    </field>
+    <field name="Calibration Time" abbrev="calib_time" type="uint16_t" unit="s">
+      <description>Amount of time to calibrate</description>
+    </field>
+    <field name="Info" abbrev="info" type="plaintext">
+      <description>Complementary human-readable information for replies.</description>
+    </field>
+  </message>
+
+  <message id="502" name="Monitor Entity State" abbrev="MonitorEntityState" source="vehicle" category="Vehicle Supervision">
+    <description>Controls monitoring of entity states in the vehicle.</description>
+    <field name="Command" abbrev="command" type="uint8_t" unit="Enumerated" prefix="MES">
+      <description>Command.</description>
+      <value id="0" abbrev="RESET" name="Reset to defaults"/>
+      <value id="1" abbrev="ENABLE" name="Enable Monitoring"/>
+      <value id="2" abbrev="DISABLE" name="Disable Monitoring"/>
+      <value id="3" abbrev="ENABLE_EXCLUSIVE" name="Enable Monitoring (exclusive - disables all others)"/>
+      <value id="4" abbrev="STATUS" name="Status Report"/>
+    </field>
+    <field name="Entity Names" abbrev="entities" type="plaintext">
+      <description>Comma separated list of entity names.</description>
+    </field>
+  </message>
+
+  <message id="503" name="Entity Monitoring State" abbrev="EntityMonitoringState" source="vehicle" category="Vehicle Supervision">
+    <field name="Entities monitored - Count" abbrev="mcount" type="uint8_t">
+      <description>
+        Number of entitities being monitored.
+      </description>
+    </field>
+    <field name="Entities monitored - Names" abbrev="mnames" type="plaintext">
+      <description>
+        Comma separated list of all entity names being monitored.
+      </description>
+    </field>
+    <field name="Entities with errors - Count" abbrev="ecount" type="uint8_t">
+      <description>
+        Number of entitities with non-critical errors.
+      </description>
+    </field>
+    <field name="Entities with errors - Names" abbrev="enames" type="plaintext">
+      <description>
+        Comma separated list of all entity names with non-critical
+        errors.
+      </description>
+    </field>
+    <field name="Entities with critical errors - Count" abbrev="ccount" type="uint8_t">
+      <description>
+        Number of entitities with critical errors.
+      </description>
+    </field>
+    <field name="Entities with critical errors - Names" abbrev="cnames" type="plaintext">
+      <description>
+        Comma separated list of all entity names with critical errors.
+      </description>
+    </field>
+    <field name="Last Error -- Description" abbrev="last_error" type="plaintext">
+      <description>
+        Description of last error.
+      </description>
+    </field>
+    <field name="Last Error -- Time" abbrev="last_error_time" type="fp64_t" unit="s">
+      <description>
+        Time of last error (Epoch time).
+      </description>
+    </field>
+  </message>
+
+  <message id="504" name="Operational Limits" abbrev="OperationalLimits" source="ccu,vehicle" category="Vehicle Supervision">
+    <description>
+      Definition of operational limits.
+    </description>
+    <field name="Field Indicator Mask" abbrev="mask" type="uint8_t" unit="Bitfield" bitfield-def="OpLimitsMask"/>
+    <field name="Maximum Depth" abbrev="max_depth" type="fp32_t" unit="m" min="0"/>
+    <field name="Minimum Altitude" abbrev="min_altitude" type="fp32_t" unit="m" min="0"/>
+    <field name="Maximum Altitude" abbrev="max_altitude" type="fp32_t" unit="m" min="0"/>
+    <field name="Minimum Speed" abbrev="min_speed" type="fp32_t" unit="m/s" min="0"/>
+    <field name="Maximum Speed" abbrev="max_speed" type="fp32_t" unit="m/s" min="0"/>
+    <field name="Maximum Vertical Rate" abbrev="max_vrate" type="fp32_t" unit="m/s" min="0"/>
+    <field name="Area -- WGS-84 Latitude" abbrev="lat" type="fp64_t" unit="rad" min="-1.5707963267948966" max="1.5707963267948966"/>
+    <field name="Area -- WGS-84 Longitude" abbrev="lon" type="fp64_t" unit="rad" min="-3.141592653589793" max="3.141592653589793"/>
+    <field name="Area -- Orientation" abbrev="orientation" type="fp32_t" unit="rad"/>
+    <field name="Area -- Width" abbrev="width" type="fp32_t" unit="m"/>
+    <field name="Area -- Length" abbrev="length" type="fp32_t" unit="m"/>
+  </message>
+
+  <message id="505" name="Get Operational Limits" abbrev="GetOperationalLimits" source="ccu" category="Vehicle Supervision">
+    <description>
+      Command to obtain the operational limits in use by the vehicle.
+    </description>
+  </message>
+
+  <message id="506" name="Calibration" abbrev="Calibration" source="vehicle" category="Vehicle Supervision">
+    <description>
+      Initiate overall calibration of a vehicle.
+    </description>
+    <field name="Duration" abbrev="duration" type="uint16_t" unit="s">
+      <description>
+        Duration of calibration.
+      </description>
+    </field>
+  </message>
+
+  <message id="507" name="Control Loops" abbrev="ControlLoops" source="vehicle" category="Vehicle Supervision">
+    <description>
+      Enable or disable control loops.
+    </description>
+    <field name="Enable" abbrev="enable" type="uint8_t" prefix="CL" unit="Enumerated">
+      <value id="0" abbrev="DISABLE" name="Disable"/>
+      <value id="1" abbrev="ENABLE"  name="Enable"/>
+    </field>
+    <field name="Control Loop Mask" abbrev="mask" type="uint32_t" unit="Bitfield" bitfield-def="CLoopsMask">
+      <description>
+        Control loop mask.
+      </description>
+    </field>
+    <field name="Scope Time Reference" abbrev="scope_ref" type="uint32_t">
+      <description>
+        Unsigned integer reference for the scope of the control loop message.
+        Scope reference should only be set by a maneuver.
+        Should be set to an always increasing reference at the time of dispatching this message.
+        Lower level controllers must inherit the same scope reference sent by maneuver.
+        This same scope reference must be sent down to lower control layers.
+      </description>
+    </field>
+  </message>
+
+  <message id="508" name="Vehicle Medium" abbrev="VehicleMedium" source="vehicle" category="Vehicle Supervision">
+    <description>
+      Detect current vehicle medium.
+    </description>
+    <field name="Medium" abbrev="medium" type="uint8_t" prefix="VM" unit="Enumerated">
+      <description>
+        Current medium.
+      </description>
+      <value id="0" abbrev="GROUND" name="Ground">
+        <description>Vehicle is on the ground</description>
+      </value>
+      <value id="1" abbrev="AIR" name="Air">
+        <description>Vehicle is airborne</description>
+      </value>
+      <value id="2" abbrev="WATER" name="Water">
+        <description>Vehicle is at water surface</description>
+      </value>
+      <value id="3" abbrev="UNDERWATER" name="Underwater">
+        <description>Vehicle is underwater</description>
+      </value>
+      <value id="4" abbrev="UNKNOWN" name="Unknown">
+        <description>Vehicle medium is unknown</description>
+      </value>
+    </field>
+  </message>
+
+  <message id="509" name="Collision" abbrev="Collision" source="vehicle" category="Vehicle Supervision">
+    <description>
+      Detected collision.
+    </description>
+    <field name="Collision value" abbrev="value" type="fp32_t" unit="m/s/s">
+      <description>
+        Estimated collision acceleration value.
+      </description>
+    </field>
+    <field name="Type" abbrev="type" type="uint8_t" unit="Bitfield" prefix="CD">
+      <description>
+        Collision flags.
+      </description>
+      <value id="0x01" abbrev="X" name="X-axis">
+        <description>Collision detected in the x-axis</description>
+      </value>
+      <value id="0x02" abbrev="Y" name="Y-axis">
+        <description>Collision detected in the y-axis</description>
+      </value>
+      <value id="0x04" abbrev="Z" name="Z-axis">
+        <description>Collision detected in the z-axis</description>
+      </value>
+      <value id="0x08" abbrev="IMPACT" name="Impact">
+        <description>Sudden impact detected</description>
+      </value>
+    </field>
+  </message>
+
+  <message id="513" name="Report Control" abbrev="ReportControl" source="ccu,vehicle" category="Vehicle Supervision">
+    <description>
+      This message is sent to trigger reports to a destination system.
+    </description>
+    <field name="Operation" abbrev="op" type="uint8_t" unit="Enumerated" prefix="OP">
+      <description>
+        Operation to perform.
+      </description>
+      <value id="0" name="Request Start of Reports" abbrev="REQUEST_START">
+        <description>
+          Request a system to periodically send reports through 'interface'.
+          The destination system will reply with a STARTED command. Periodicity
+          will be defined by the field 'period'. If applicable, the destination
+          address is defined in field 'dst'.
+        </description>
+      </value>
+      <value id="1" name="Report Started" abbrev="STARTED">
+        <description>
+          The destination system will reply a message with this operation
+          everytime a report is successfully started. The periodicity of
+          reports is indicated in the field 'period' while the communication
+          interface to be used is described in field 'interface'. If applicable,
+          the destination address is defined in field 'dst'.
+        </description>
+      </value>
+      <value id="2" name="Request Stop of Reports" abbrev="REQUEST_STOP">
+        <description>
+          Request a system to stop dispatching reports through a given
+          communication interface described in 'interface'. The destination
+          system will reply with a STOPPED command. If applicable, the
+          destination address is defined in field 'dst'.
+        </description>
+      </value>
+      <value id="3" name="Report Stopped" abbrev="STOPPED">
+        <description>
+          The destination system will reply a message with this operation
+          everytime a scheduled report is successfully stopped in a defined
+          communication interface. If applicable, the destination address
+          is defined in field 'dst'.
+        </description>
+      </value>
+      <value id="4" name="Request Single Reports" abbrev="REQUEST_REPORT">
+        <description>
+          Request a system to issue a single report in a defined communication
+          interface. The destination system will reply with a REPORT_ISSUED command.
+          If applicable, the destination address is defined in field 'dst'.
+        </description>
+      </value>
+      <value id="5" name="Single Report Sent" abbrev="REPORT_SENT">
+        <description>
+          The destination system will reply a single report request with
+          this operation.If applicable, the destination address is defined
+          in field 'dst'.
+        </description>
+      </value>
+    </field>
+    <field name="Communication Interface" abbrev="comm_interface" type="uint8_t" unit="Bitfield" prefix="CI">
+      <description>
+        Communication interface to be used for reports.
+      </description>
+      <value id="0x01" name="Acoustic" abbrev="ACOUSTIC">
+        <description>Use acoustic communications</description>
+      </value>
+      <value id="0x02" name="Satellite" abbrev="SATELLITE">
+        <description>Use satellite communications</description>
+      </value>
+      <value id="0x04" name="GSM" abbrev="GSM">
+        <description>Use Global System for Mobile Communications</description>
+      </value>
+      <value id="0x08" name="Mobile" abbrev="MOBILE">
+        <description>Use mobile networks</description>
+      </value>
+    </field>
+    <field name="Period" abbrev="period" type="uint16_t" unit="s">
+      <description>
+        Desired periodicity for scheduled reports.
+      </description>
+    </field>
+    <field name="Destination System" abbrev="sys_dst" type="plaintext">
+      <description>
+        Destination Address to be filled where applicable. It should be
+        interpreted differently depending on communication interface.
+      </description>
+    </field>
+  </message>
+  <message id="905" name="Tachograph" abbrev="Tachograph" source="vehicle" flags="periodic"  category="Vehicle Supervision">
+    <description>
+      This messages is used to record system activity parameters. These
+      parameters are mainly used for used for maintenance purposes.
+    </description>
+    <field name="Last Service Timestamp" abbrev="timestamp_last_service" type="fp64_t" unit="s">
+      <description>
+        The time when the last service was performed. The number of
+        seconds is represented in Universal Coordinated Time (UCT) in
+        seconds since Jan 1, 1970.
+      </description>
+    </field>
+    <field name="Time - Next Service" abbrev="time_next_service" type="fp32_t" unit="s">
+      <description>
+        Amount of time until the next recommended service.
+      </description>
+    </field>
+    <field name="Time Motor - Next Service" abbrev="time_motor_next_service" type="fp32_t" unit="s">
+      <description>
+        Amount of time the motor can run until the next recommended service.
+      </description>
+    </field>
+    <field name="Time Idle - Ground" abbrev="time_idle_ground" type="fp32_t" unit="s">
+      <description>
+        Amount of time the system spent idle on the ground.
+      </description>
+    </field>
+    <field name="Time Idle - Air" abbrev="time_idle_air" type="fp32_t" unit="s">
+      <description>
+        Amount of time the system spent idle in the air.
+      </description>
+    </field>
+    <field name="Time Idle - Water" abbrev="time_idle_water" type="fp32_t" unit="s">
+      <description>
+        Amount of time the system spent idle on the water (not submerged).
+      </description>
+    </field>
+    <field name="Time Idle - Underwater" abbrev="time_idle_underwater" type="fp32_t" unit="s">
+      <description>
+        Amount of time the system spent idle underwater.
+      </description>
+    </field>
+    <field name="Time Idle - Unknown" abbrev="time_idle_unknown" type="fp32_t" unit="s">
+      <description>
+        Amount of time the system spent idle in an unknown medium.
+      </description>
+    </field>
+    <field name="Time Motor - Ground" abbrev="time_motor_ground" type="fp32_t" unit="s">
+      <description>
+        Amount of time the system spent on the ground with the motor running.
+      </description>
+    </field>
+    <field name="Time Motor - Air" abbrev="time_motor_air" type="fp32_t" unit="s">
+      <description>
+        Amount of time the system spent in the air with the motor running.
+      </description>
+    </field>
+    <field name="Time Motor - Water" abbrev="time_motor_water" type="fp32_t" unit="s">
+      <description>
+        Amount of time the system spent on the water (not submerged) with the motor running.
+      </description>
+    </field>
+    <field name="Time Motor - Underwater" abbrev="time_motor_underwater" type="fp32_t" unit="s">
+      <description>
+        Amount of time the system spent underwater with the motor running.
+      </description>
+    </field>
+    <field name="Time Motor - Unknown" abbrev="time_motor_unknown" type="fp32_t" unit="s">
+      <description>
+        Amount of time the system spent in an unknown medium with the motor running.
+      </description>
+    </field>
+    <field name="Recorded RPMs - Minimum" abbrev="rpm_min" type="int16_t" unit="rpm">
+      <description>
+        The minimum recorded RPM value.
+      </description>
+    </field>
+    <field name="Recorded RPMs - Maximum" abbrev="rpm_max" type="int16_t" unit="rpm">
+      <description>
+        The maximum recorded RPM value.
+      </description>
+    </field>
+    <field name="Recorded Depth - Maximum" abbrev="depth_max" type="fp32_t" unit="m">
+      <description>
+        The maximum recorded depth value.
+      </description>
+    </field>
+  </message>
+
+  <!-- Plan Supervision -->
+  <message id="550" name="Abort" abbrev="Abort" source="ccu" category="Plan Supervision">
+    <description>
+      Stops any executing actions and put the system in a standby mode.
+    </description>
+  </message>
+
+  <message id="551" name="Plan Specification" abbrev="PlanSpecification" source="ccu,vehicle" category="Plan Supervision">
+    <description>
+      Identity and description of a plan's general parameters,
+      associated with plan loading (i.e. load plan command in
+      *PlanCommand*).
+
+      A plan specification is defined by a plan identifier, a set of
+      maneuver specifications and a start maneuver from that set.
+
+      See the :ref:`PlanManeuver` message for details on maneuver
+      specification.
+    </description>
+    <field name="Plan ID" abbrev="plan_id" type="plaintext">
+      <description>
+        The plan's identifier.
+      </description>
+    </field>
+    <field name="Plan Description" abbrev="description" type="plaintext">
+      <description>
+        Verbose text description of plan.
+      </description>
+    </field>
+    <field name="Namespace" abbrev="vnamespace" type="plaintext">
+      <description>
+        Namespace for plan variables.
+      </description>
+    </field>
+    <field name="Plan Variables" abbrev="variables" type="message-list" message-type="PlanVariable">
+      <description>
+        Plan variables.
+      </description>
+    </field>
+    <field name="Starting maneuver" abbrev="start_man_id" type="plaintext">
+      <description>
+        Indicates the id of the starting maneuver for this plan.
+      </description>
+    </field>
+    <field name="Maneuvers" abbrev="maneuvers" type="message-list" message-type="PlanManeuver">
+      <description>
+        List of maneuver specifications.
+      </description>
+    </field>
+    <field name="Transitions" abbrev="transitions" type="message-list" message-type="PlanTransition">
+      <description>
+        List of maneuver specifications.
+      </description>
+    </field>
+    <field name="Start Actions" abbrev="start_actions" type="message-list">
+      <description>
+        Contains an optionally defined 'MessageList' for actions fired
+        on plan activation.
+      </description>
+    </field>
+    <field name="End Actions" abbrev="end_actions" type="message-list">
+      <description>
+        Contains an optionally defined 'MessageList' for actions fired
+        on plan termination.
+      </description>
+    </field>
+  </message>
+
+  <message id="552" name="Plan Maneuver" abbrev="PlanManeuver" source="ccu" category="Plan Supervision">
+    <description>
+      Named plan maneuver.
+    </description>
+    <field name="Maneuver ID" abbrev="maneuver_id" type="plaintext">
+      <description>
+        The maneuver ID.
+      </description>
+    </field>
+    <field name="Maneuver Specification" abbrev="data" type="message" message-type="Maneuver">
+      <description>
+        The maneuver specification.
+      </description>
+    </field>
+    <field name="Start Actions" abbrev="start_actions" type="message-list">
+      <description>
+        Contains an optionally defined 'MessageList' for actions fired
+        on plan activation.
+      </description>
+    </field>
+    <field name="End Actions" abbrev="end_actions" type="message-list">
+      <description>
+        Contains an optionally defined 'MessageList' for actions fired
+        on plan termination.
+      </description>
+    </field>
+  </message>
+
+  <message id="553" name="Plan Transition" abbrev="PlanTransition" source="ccu" category="Plan Supervision">
+    <description>
+      Describes a plan transition within a plan specification. A
+      transition states the vehicle conditions that must be met to
+      signal the transition, the maneuver that should be started as a
+      result, and an optional set of actions triggered by the
+      transition.
+    </description>
+    <field name="Source" abbrev="source_man" type="plaintext">
+      <description>
+        Comma separated list of maneuver IDs, or the special value '.'
+        to identify a global plan transition.
+      </description>
+    </field>
+    <field name="Destination Maneuver Name" abbrev="dest_man" type="plaintext">
+      <description>
+        Target maneuver name.
+        If it equals the special value '_done_' then plan should
+        terminate with a success status.
+        If it equals the special value '_error_' then the plan should
+        terminate with an error status.
+      </description>
+    </field>
+    <field name="Transition conditions" abbrev="conditions" type="plaintext">
+      <description>
+        Comma separated list of conditions for transition. Each
+        condition identifier corresponds to a known predicate which is
+        interpreted and tested internally by the vehicle.
+      </description>
+    </field>
+    <field name="Transition actions" abbrev="actions" type="message-list">
+      <description>
+        Messages processed when the transition is triggered.
+      </description>
+    </field>
+  </message>
+
+  <message id="556" name="Plan DB" abbrev="PlanDB" category="Plan Supervision">
+    <description>
+      Request/reply to plan database.
+    </description>
+    <field name="Type" abbrev="type" unit="Enumerated" type="uint8_t" prefix="DBT">
+      <description>
+        Indicates if the message is a request, or a reply to a
+        previous request.
+      </description>
+      <value id="0" name="Request" abbrev="REQUEST"/>
+      <value id="1" name="Reply -- Success" abbrev="SUCCESS"/>
+      <value id="2" name="Reply -- Failure" abbrev="FAILURE"/>
+      <value id="3" name="Reply -- In Progress" abbrev="IN_PROGRESS"/>
+    </field>
+    <field name="Operation" abbrev="op" type="uint8_t" unit="Enumerated" prefix="DBOP">
+      <description>
+        Indicates the operation affecting the DB.
+
+        The operation may relate to a single plan or the entire plan DB.
+        For each request,  a plan DB may reply with any number of 'in progress'
+        replies followed by a success or a failure reply.
+
+        The 'op', 'request_id' and 'plan_id' fields of a request will be echoed
+        in one or more responses to that request.
+        The operation at stake also determines a certain type of the 'arg' field,
+        and whether or not the 'plan_id' field needs to be set.
+      </description>
+      <value id="0" name="Set Plan" abbrev="SET">
+        <description>
+          Set a plan in the DB. The 'plan_id' field identifies the
+          plan, and a pre-existing plan with the same identifier, if
+          any will be overwritten. For requests, the 'arg' field must
+          contain a 'PlanSpecification' message.
+        </description>
+      </value>
+      <value id="1" name="Delete Plan" abbrev="DEL">
+        <description>
+          Delete a plan from the DB. The 'plan_id' field identifies
+          the plan to delete.
+        </description>
+      </value>
+      <value id="2" name="Get Plan" abbrev="GET">
+        <description>
+          Get a plan stored in the DB.The 'plan_id' field identifies
+          the plan. Successful replies will yield a
+          'PlanSpecification' message in the 'arg' field.
+        </description>
+      </value>
+      <value id="3" name="Get Plan Info" abbrev="GET_INFO">
+        <description>
+          Get DB state for a stored plan. The 'plan_id' field
+          identifies the plan. Successful replies will yield a
+          'PlanDBInformation' message in the 'arg' field.
+        </description>
+      </value>
+      <value id="4" name="Clear Database" abbrev="CLEAR">
+        <description>
+          Clear the entire DB.
+        </description>
+      </value>
+      <value id="5" name="Get Database State (Simple)" abbrev="GET_STATE">
+        <description>
+          Get state of the entire DB. Successful replies will yield a
+          'PlanDBState' message in the 'arg' field but without
+          individual plan information (in the 'plans_info' field of
+          'PlanDBState').
+        </description>
+      </value>
+      <value id="6" name="Get Database State (Detailed)"  abbrev="GET_DSTATE">
+        <description>
+          Get detailed state of the entire DB. Successful replies
+          will yield a 'PlanDBState' message in the 'arg' field with
+          individual plan information (in the 'plans_info' field of
+          'PlanDBState').
+        </description>
+      </value>
+      <value id="7" name="Boot Notification" abbrev="BOOT">
+        <description>
+          PlanDB replies of this type are sent automatically during
+          bootstrap.
+        </description>
+      </value>
+    </field>
+    <field name="Request ID" abbrev="request_id" type="uint16_t">
+      <description>
+        Request ID. This may be used by interfacing modules,
+        e.g. using sequence counters, to annotate requests and
+        appropriately identify replies
+      </description>
+    </field>
+    <field name="Plan ID" abbrev="plan_id" type="plaintext">
+      <description>
+        Plan identifier for the operation, if one is required.
+      </description>
+    </field>
+    <field name="Argument" abbrev="arg" type="message">
+      <description>
+        Request or reply argument.
+      </description>
+    </field>
+    <field name="Complementary Information" abbrev="info" type="plaintext">
+      <description>
+        Human-readable complementary information. For example this
+        may be used to detail reasons for failure, or to report
+        in-progress information.
+      </description>
+    </field>
+  </message>
+
+  <message id="557" name="Plan DB State" abbrev="PlanDBState" category="Plan Supervision">
+    <description>
+      Characterizes the state of the entire plan database.
+    </description>
+    <field name="Plan -- Count" abbrev="plan_count" type="uint16_t">
+      <description>
+        Number of stored plans.
+      </description>
+    </field>
+    <field name="Plan -- Size of all plans" abbrev="plan_size" type="uint32_t">
+      <description>
+        Size of all plans.The value equals the sum of the IMC payload
+        sizes for 'PlanSpecification' stored in the DB.
+      </description>
+    </field>
+    <field name="Last Change -- Time" abbrev="change_time" type="fp64_t" unit="s">
+      <description>
+        Time of last change (Epoch time).
+      </description>
+    </field>
+    <field name="Last Change -- Source Address" abbrev="change_sid" type="uint16_t">
+      <description>
+        IMC address for source of last DB change.
+      </description>
+    </field>
+    <field name="Last Change -- Source Name" abbrev="change_sname" type="plaintext">
+      <description>
+        IMC node name for source of last DB change.
+      </description>
+    </field>
+    <field name="MD5" abbrev="md5" type="rawdata">
+      <description>
+        MD5 database verification code. The MD5 hash sum is computed
+        over the stream formed by the MD5 of all plans, ordered by
+        plan id, in compliance with RFC 1321.
+      </description>
+    </field>
+    <field name="Plan info" abbrev="plans_info" type="message-list" message-type="PlanDBInformation">
+      <description>
+        Individual information for plans.
+      </description>
+    </field>
+  </message>
+
+  <message id="558" name="Plan DB Information" abbrev="PlanDBInformation" category="Plan Supervision">
+    <field name="Plan ID" abbrev="plan_id" type="plaintext">
+      <description>
+        Plan identifier.
+      </description>
+    </field>
+    <field name="Plan Size" abbrev="plan_size" type="uint16_t">
+      <description>
+        Plan size. The value equals the IMC message payload of the
+        associated 'PlanSpecification' message in bytes.
+      </description>
+    </field>
+    <field name="Last Changed -- Time" abbrev="change_time" type="fp64_t">
+      <description>
+        Time of last change to the plan (Epoch time).
+      </description>
+    </field>
+    <field name="Last Change -- Source Address" abbrev="change_sid" type="uint16_t">
+      <description>
+        IMC address for source of last change to the plan.
+      </description>
+    </field>
+    <field name="Last Change -- Source Name" abbrev="change_sname" type="plaintext">
+      <description>
+        IMC node name for source of last change to the plan.
+      </description>
+    </field>
+    <field name="MD5" abbrev="md5" type="rawdata">
+      <description>
+        MD5 plan verification code. The value is calculated over the
+        message payload of the 'PlanSpecification', in compliance with
+        RFC 1321.
+      </description>
+    </field>
+  </message>
+
+  <message id="559" name="Plan Control" abbrev="PlanControl" source="ccu,vehicle" category="Plan Supervision">
+    <description>
+      Plan control request/reply.
+    </description>
+    <field name="Type" abbrev="type" unit="Enumerated" type="uint8_t" prefix="PC">
+      <description>
+        Indicates if the message is a request or a reply to a
+        previous request. The *op*, *request_id* and *plan_id* fields
+        of a request will be echoed in one or more responses to that
+        request.
+      </description>
+      <value id="0" name="Request" abbrev="REQUEST"/>
+      <value id="1" name="Reply -- Success" abbrev="SUCCESS"/>
+      <value id="2" name="Reply -- Failure" abbrev="FAILURE"/>
+      <value id="3" name="Reply -- In Progress" abbrev="IN_PROGRESS"/>
+    </field>
+    <field name="Operation" abbrev="op" type="uint8_t" unit="Enumerated" prefix="PC">
+      <description>
+        Plan control operation.
+      </description>
+      <value id="0" abbrev="START" name="Start Plan">
+        <description>
+          Start plan identified by *plan_id* field.  The command will
+          try to load the corresponding plan if none is loaded, and in
+          that case will follow the same discipline as the *LOAD*
+          command.
+
+          If the message in *arg* is a :ref:`Maneuver`, a single-maneuver plan
+          will be generated and executed.
+
+          This will override any current plan being executed.
+        </description>
+      </value>
+      <value id="1" abbrev="STOP" name="Stop Plan">
+        <description>
+          Stop current plan being executed if any.
+        </description>
+      </value>
+      <value id="2" abbrev="LOAD" name="Load Plan">
+        <description>
+          Load Plan. If a :ref:`PlanSpecification` is given with the
+          request in the *data* field, then that plan is used and
+          stored in the Plan DB. Otherwise, the plan is loaded from
+          the Plan DB.
+        </description>
+      </value>
+      <value id="3" abbrev="GET" name="Get Plan">
+        <description>
+          Get loaded plan. For a successful reply, the *data* field
+          will contain the :ref:`PlanSpecification` message that
+          corresponds to the currently loaded plan.
+        </description>
+      </value>
+    </field>
+    <field name="Request ID" abbrev="request_id" type="uint16_t">
+      <description>
+        Request ID. This may be used by interfacing modules e.g. using
+        sequence counters.  to annotate requests and appropriately
+        identify replies.
+      </description>
+    </field>
+    <field name="Plan Identifier" abbrev="plan_id" type="plaintext">
+      <description>
+        The identifier for the plan to be stopped / started / loaded /
+        retrieved according to the command requested (*op* field).
+      </description>
+    </field>
+    <field name="Flags" abbrev="flags" type="uint16_t" prefix="FLG" unit="Bitfield">
+      <!-- Request flags -->
+      <value id="0x0001" name="Calibrate Vehicle" abbrev="CALIBRATE">
+        <description>
+          Perform vehicle calibration.
+        </description>
+      </value>
+      <value id="0x0002" name="Ignore Errors" abbrev="IGNORE_ERRORS">
+        <description>
+          Execute current plan while ignoring some errors that might be active.
+        </description>
+      </value>
+      <!-- Response flags -->
+    </field>
+    <field name="Request/Reply Argument" abbrev="arg" type="message">
+      <description>
+        Complementary message argument for requests/replies.
+      </description>
+    </field>
+    <field name="Complementary Info" abbrev="info" type="plaintext">
+      <description>
+        Complementary human-readable information. This is used
+        in association to replies.
+      </description>
+    </field>
+  </message>
+
+  <message id="560" name="Plan Control State" flags="periodic" abbrev="PlanControlState" source="vehicle" category="Plan Supervision">
+    <description>
+      State of plan control.
+    </description>
+    <field name="State" abbrev="state" type="uint8_t" prefix="PCS" unit="Enumerated">
+      <description>
+        Describes overall state.
+      </description>
+      <value id="0" name="Blocked" abbrev="BLOCKED">
+        <description>
+          Plan execution is blocked e.g., due to a vehicle error,
+          or if no plan is loaded.
+        </description>
+      </value>
+      <value id="1" name="Ready" abbrev="READY">
+        <description>
+          Ready to start plan execution.
+        </description>
+      </value>
+      <value id="2" name="Initializing" abbrev="INITIALIZING">
+        <description>
+          Initializing plan for execution.
+        </description>
+      </value>
+      <value id="3" name="Executing" abbrev="EXECUTING">
+        <description>
+          Executing plan.
+        </description>
+      </value>
+    </field>
+    <field name="Plan -- ID" abbrev="plan_id" type="plaintext">
+      <description>
+        Identifier of plan currently loaded.
+      </description>
+    </field>
+    <field name="Plan -- ETA" abbrev="plan_eta" type="int32_t" unit="s">
+      <description>
+        Current plan estimated time to completion.
+        The value will be -1 if the time is unknown or undefined.
+      </description>
+    </field>
+    <field name="Plan -- Progress" abbrev="plan_progress" type="fp32_t" unit="%">
+      <description>
+        Current plan estimated progress in percent.
+        The value will be negative if unknown or undefined.
+      </description>
+    </field>
+    <field name="Maneuver -- ID" abbrev="man_id" type="plaintext">
+      <description>
+        Current node ID, when executing a plan.
+      </description>
+    </field>
+    <field name="Maneuver -- Type" abbrev="man_type" type="uint16_t">
+      <description>
+        Type of maneuver being executed (IMC serialization id),
+        when executing a plan.
+      </description>
+    </field>
+    <field name="Maneuver -- ETA" abbrev="man_eta" type="int32_t" unit="s">
+      <description>
+        Current node estimated time to completion, when executing a plan.
+        The value will be -1 if the time is unknown or undefined.
+      </description>
+    </field>
+    <field name="Last Plan Outcome" abbrev="last_outcome" type="uint8_t" prefix="LPO" unit="Enumerated">
+      <description>
+        Outcome of the last executed plan.
+      </description>
+      <value id="0" name="None" abbrev="NONE">
+        <description>
+          Unknown or not filled.
+        </description>
+      </value>
+      <value id="1" name="Success" abbrev="SUCCESS">
+        <description>
+          Last plan execution was successful.
+        </description>
+      </value>
+      <value id="2" name="Failure" abbrev="FAILURE">
+        <description>
+          Last plan execution was a failure.
+        </description>
+      </value>
+    </field>
+  </message>
+
+  <message id="561" name="Plan Variable" abbrev="PlanVariable" source="vehicle,ccu" category="Plan Supervision">
+    <description>A plan variable.</description>
+    <field name="Name" abbrev="name" type="plaintext"/>
+    <field name="Value" abbrev="value" type="plaintext"/>
+    <field name="Type" abbrev="type" type="uint8_t" unit="Enumerated" prefix="PVT">
+      <value id="0" name="Boolean" abbrev="BOOLEAN"/>
+      <value id="1" name="Number" abbrev="NUMBER"/>
+      <value id="2" name="Text" abbrev="TEXT"/>
+      <value id="3" name="Message" abbrev="MESSAGE"/>
+    </field>
+    <field name="Access Type" abbrev="access" type="uint8_t" unit="Enumerated" prefix="PVA">
+      <value id="0" name="Input" abbrev="INPUT"/>
+      <value id="1" name="Output" abbrev="OUTPUT"/>
+      <value id="2" name="Local" abbrev="LOCAL"/>
+    </field>
+  </message>
+
+  <message id="562" name="Plan Generation" abbrev="PlanGeneration" source="vehicle,ccu" category="Plan Supervision">
+    <description>
+      This message is used to order the generation of plans based on
+      id and set of parameters.
+    </description>
+    <field name="Command" abbrev="cmd" type="uint8_t" unit="Enumerated" prefix="CMD">
+      <value abbrev="GENERATE" name="Generate" id="0">
+        <description>
+          Generate the plan and store it in the PlanDB.
+        </description>
+      </value>
+      <value abbrev="EXECUTE" name="Execute" id="1">
+        <description>
+          Generate (storing it in the PlanDB) and execute it immediately.
+        </description>
+      </value>
+    </field>
+    <field name="Operation" abbrev="op" type="uint8_t" unit="Enumerated" prefix="OP">
+      <value abbrev="REQUEST" name="Request" id="0">
+        <description>
+          Request the execution of this command.
+        </description>
+      </value>
+      <value abbrev="ERROR" name="Error" id="1">
+        <description>
+          Some error has occurred while executing the command. The
+          error can be found in the 'params' tuplelist (under the
+          key 'error').
+        </description>
+      </value>
+      <value abbrev="SUCCESS" name="Success" id="2">
+        <description>
+          The requested command was executed successfully.
+        </description>
+      </value>
+    </field>
+    <field name="Plan Identifier" abbrev="plan_id" type="plaintext">
+      <description>
+        The name of the plan to be generated.
+      </description>
+    </field>
+    <field name="Parameters" abbrev="params" type="plaintext" unit="TupleList">
+      <description>
+        An optional list of parameters to be used by the plan
+        generation module.
+      </description>
+    </field>
+  </message>
+
+  <message id="564" name="Plan Statistics" abbrev="PlanStatistics" source="vehicle" category="Plan Supervision">
+    <field name="Plan Identifier" abbrev="plan_id" type="plaintext">
+      <description>
+        The name of the plan to be generated.
+      </description>
+    </field>
+    <field name="Type" abbrev="type" type="uint8_t" unit="Enumerated" prefix="TP">
+      <description>
+        Type of plan statistics, if they are launched before, during or after the plan execution.
+      </description>
+      <value id="0" name="Before Plan" abbrev="PREPLAN"/>
+      <value id="1" name="During Plan" abbrev="INPLAN"/>
+      <value id="2" name="After Plan" abbrev="POSTPLAN"/>
+    </field>
+    <field name="Properties" abbrev="properties" type="uint8_t" prefix="PRP" unit="Bitfield">
+      <value id="0x00" name="Basic Plan" abbrev="BASIC">
+        <description>
+          Basic plan, meaning it is Linear, Finite and Noncyclic.
+        </description>
+      </value>
+      <value id="0x01" name="Nonlinear" abbrev="NONLINEAR">
+        <description>
+          Plan is nonlinear.
+        </description>
+      </value>
+      <value id="0x02" name="Infinite" abbrev="INFINITE">
+        <description>
+          Plan is infinite in duration.
+        </description>
+      </value>
+      <value id="0x04" name="Cyclical" abbrev="CYCLICAL">
+        <description>
+          Plan is cyclical.
+        </description>
+      </value>
+      <value id="0x07" name="All" abbrev="ALL">
+        <description>
+          All properties checked.
+        </description>
+      </value>
+    </field>
+    <field name="Durations" abbrev="durations" type="plaintext" unit="TupleList">
+      <description>
+        Maneuver and plan duration statistics in seconds, for example: Total=1000,Goto1=20,Rows=980
+      </description>
+    </field>
+    <field name="Distances" abbrev="distances" type="plaintext" unit="TupleList">
+      <description>
+        Distances travelled in meters in each maneuver and/or total: Total=2000,Rows=1800,Elevator=200
+      </description>
+    </field>
+    <field name="Actions" abbrev="actions" type="plaintext" unit="TupleList">
+      <description>
+        List of components active by plan actions during the plan and time active in seconds: Sidescan=100,Camera Module=150
+      </description>
+    </field>
+    <field name="Fuel" abbrev="fuel" type="plaintext" unit="TupleList">
+      <description>
+        Amount of fuel spent, in battery percentage, by different parcels (if applicable): Total=35,Hotel=5,Payload=10,Motion=20,IMU=0
+      </description>
+    </field>
+  </message>
+  <message id="889" name="Aborted" abbrev="Aborted" category="Plan Supervision">
+    <description>
+      This message signals that an :ref:`Abort` message was received and acted upon.
+    </description>
+  </message>
+</messages>

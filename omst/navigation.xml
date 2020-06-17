@@ -1,0 +1,503 @@
+<messages>
+
+  <!-- Navigation -->
+  <message id="350" name="Estimated State" abbrev="EstimatedState" source="vehicle" flags="periodic" category="Navigation">
+    <description>
+      This message presents the estimated state of the vehicle.
+
+      EstimatedState is a complete description of the system
+      in terms of parameters such as position, orientation and
+      velocities at a particular moment in time.
+
+      The system position is given by a North-East-Down (NED)
+      local tangent plane displacement (x, y, z) relative to
+      an absolute WGS-84 coordinate (latitude, longitude,
+      height above ellipsoid).
+
+      The symbols for position and attitude as well as linear and
+      angular velocities were chosen according to SNAME's notation (1950).
+      The body-fixed reference frame and Euler angles are depicted
+      next:
+
+      .. figure:: ../images/euler-lauv.png
+         :align:  center
+
+      Euler angles
+    </description>
+    <field name="Latitude (WGS-84)" abbrev="lat" type="fp64_t" unit="rad" min="-1.5707963267948966" max="1.5707963267948966">
+      <description>
+        WGS-84 Latitude.
+      </description>
+    </field>
+    <field name="Longitude (WGS-84)" abbrev="lon" type="fp64_t" unit="rad" min="-3.141592653589793" max="3.141592653589793">
+      <description>
+        WGS-84 Longitude.
+      </description>
+    </field>
+    <field name="Height (WGS-84)" abbrev="height" type="fp32_t" unit="m">
+      <description>
+        Height above the WGS-84 ellipsoid.
+      </description>
+    </field>
+    <field name="Offset north" abbrev="x" type="fp32_t" unit="m">
+      <description>
+        The North offset of the North/East/Down field with respect to
+        LLH.
+      </description>
+    </field>
+    <field name="Offset east" abbrev="y" type="fp32_t" unit="m">
+      <description>
+        The East offset of the North/East/Down field with respect to
+        LLH.
+      </description>
+    </field>
+    <field name="Offset down" abbrev="z" type="fp32_t" unit="m">
+      <description>
+        The Down offset of the North/East/Down field with respect to
+        LLH.
+      </description>
+    </field>
+    <field name="Rotation over x axis" abbrev="phi" type="fp32_t" unit="rad" min="-3.141592653589793" max="3.141592653589793">
+      <description>
+        The phi Euler angle from the vehicle's attitude.
+      </description>
+    </field>
+    <field name="Rotation over y axis" abbrev="theta" type="fp32_t" unit="rad" min="-1.57079632679490" max="1.57079632679490">
+      <description>
+        The theta Euler angle from the vehicle's attitude.
+      </description>
+    </field>
+    <field name="Rotation over z axis" abbrev="psi" type="fp32_t" unit="rad" min="-3.141592653589793" max="3.141592653589793">
+      <description>
+        The psi Euler angle from the vehicle's attitude.
+      </description>
+    </field>
+    <field name="Body-Fixed xx Velocity" abbrev="u" type="fp32_t" unit="m/s">
+      <description>
+        Body-fixed frame xx axis velocity component.
+      </description>
+    </field>
+    <field name="Body-Fixed yy Velocity" abbrev="v" type="fp32_t" unit="m/s">
+      <description>
+        Body-fixed frame yy axis velocity component.
+      </description>
+    </field>
+    <field name="Body-Fixed zz Velocity" abbrev="w" type="fp32_t" unit="m/s">
+      <description>
+        Body-fixed frame zz axis velocity component.
+      </description>
+    </field>
+    <field name="Ground Velocity X (North)" abbrev="vx" type="fp32_t" unit="m/s">
+      <description>
+        Ground Velocity xx axis velocity component.
+      </description>
+    </field>
+    <field name="Ground Velocity Y (East)" abbrev="vy" type="fp32_t" unit="m/s">
+      <description>
+        Ground Velocity yy axis velocity component.
+      </description>
+    </field>
+    <field name="Ground Velocity Z (Down)" abbrev="vz" type="fp32_t" unit="m/s">
+      <description>
+        Ground Velocity zz axis velocity component.
+      </description>
+    </field>
+    <field name="Angular Velocity in x" abbrev="p" type="fp32_t" unit="rad/s" min="-3.141592653589793" max="3.141592653589793">
+      <description>
+        The angular velocity over body-fixed xx axis (roll).
+      </description>
+    </field>
+    <field name="Angular Velocity in y" abbrev="q" type="fp32_t" unit="rad/s" min="-3.141592653589793" max="3.141592653589793">
+      <description>
+        The angular velocity over body-fixed yy axis (pitch).
+      </description>
+    </field>
+    <field name="Angular Velocity in z" abbrev="r" type="fp32_t" unit="rad/s"  min="-3.141592653589793" max="3.141592653589793">
+      <description>
+        The angular velocity over body-fixed zz axis (yaw).
+      </description>
+    </field>
+    <field name="Depth" abbrev="depth" type="fp32_t" unit="m">
+      <description>
+        Depth, in meters. To be used by underwater vehicles. Negative
+        values denote invalid estimates.
+      </description>
+    </field>
+    <field name="Altitude" abbrev="alt" type="fp32_t" unit="m">
+      <description>
+        Altitude, in meters. Negative values denote invalid estimates.
+      </description>
+    </field>
+  </message>
+
+  <message id="351" name="Estimated Stream Velocity" abbrev="EstimatedStreamVelocity" source="vehicle" flags="periodic" category="Navigation">
+    <description>
+      The estimated stream velocity, typically for water or air
+      streams.
+    </description>
+    <field name="X component (North)" abbrev="x" type="fp64_t" unit="m/s">
+      <description>
+        X component (North).
+      </description>
+    </field>
+    <field name="Y component (East)" abbrev="y" type="fp64_t" unit="m/s">
+      <description>
+        Y component (East).
+      </description>
+    </field>
+    <field name="Z component (Down)" abbrev="z" type="fp64_t" unit="m/s">
+      <description>
+        Z component (Down).
+      </description>
+    </field>
+  </message>
+
+  <message id="354" name="Navigation Uncertainty" abbrev="NavigationUncertainty" category="Navigation">
+    <description>
+      Report of navigation uncertainty.
+      This is usually given by the output of the state
+      covariance matrix of an Extended Kalman Filter.
+    </description>
+    <field name="Variance - x Position" abbrev="x" type="fp32_t" unit="m">
+      <description>The North offset variance of the North/East/Down
+      field with respect to LLH.</description>
+    </field>
+    <field name="Variance - y Position" abbrev="y" type="fp32_t" unit="m">
+      <description>The East offset variance of the North/East/Down
+      field with respect to LLH.</description>
+    </field>
+    <field name="Variance - z Position" abbrev="z" type="fp32_t" unit="m">
+      <description>The Down offset variance of the North/East/Down
+      field with respect to LLH.</description>
+    </field>
+    <field name="Variance - Roll" abbrev="phi" type="fp32_t" unit="rad">
+      <description>
+        The phi Euler angle variance from the vehicle's attitude.
+      </description>
+    </field>
+    <field name="Variance - Pitch" abbrev="theta" type="fp32_t" unit="rad">
+      <description>
+        The theta Euler angle variance from the vehicle's attitude.
+      </description>
+    </field>
+    <field name="Variance - Yaw" abbrev="psi" type="fp32_t" unit="rad">
+      <description>
+        The psi Euler angle variance from the vehicle's attitude.
+      </description>
+    </field>
+    <field name="Variance - Gyro. Roll Rate" abbrev="p" type="fp32_t" unit="rad/s">
+      <description>
+        The angular velocity variance over body-fixed xx axis (roll).
+      </description>
+    </field>
+    <field name="Variance - Gyro. Pitch Rate" abbrev="q" type="fp32_t" unit="rad/s">
+      <description>
+        The angular velocity variance over body-fixed yy axis (pitch).
+      </description>
+    </field>
+    <field name="Variance - Gyro. Yaw Rate" abbrev="r" type="fp32_t" unit="rad/s">
+      <description>
+        The angular velocity variance over body-fixed zz axis (yaw).
+      </description>
+    </field>
+    <field name="Variance - Body-Fixed xx Velocity" abbrev="u" type="fp32_t" unit="m/s">
+      <description>
+        Body-fixed frame xx axis velocity variance component.
+      </description>
+    </field>
+    <field name="Variance - Body-Fixed yy Velocity" abbrev="v" type="fp32_t" unit="m/s">
+      <description>
+        Body-fixed frame yy axis velocity variance component.
+      </description>
+    </field>
+    <field name="Variance - Body-Fixed ww Velocity" abbrev="w" type="fp32_t" unit="m/s">
+      <description>
+        Body-fixed frame zz axis velocity variance component.
+      </description>
+    </field>
+    <field name="Variance - Yaw Bias" abbrev="bias_psi" type="fp32_t" unit="rad">
+      <description>
+        The psi Euler angle bias variance from the vehicle's sensed attitude.
+      </description>
+    </field>
+    <field name="Variance - Gyro. Yaw Rate Bias" abbrev="bias_r" type="fp32_t" unit="rad/s">
+      <description>
+        The angular velocity over body-fixed zz axis bias variance from sensor.
+      </description>
+    </field>
+  </message>
+
+  <message id="355" name="Navigation Data" abbrev="NavigationData" category="Navigation">
+    <description>
+      Report of navigation data.
+      This is constituted by data which is not
+      part of the vehicle estimated state but
+      that the user may refer for more information.
+    </description>
+    <field name="Yaw Bias" abbrev="bias_psi" type="fp32_t" unit="rad">
+      <description>
+        The psi Euler angle bias from the vehicle's sensed attitude.
+      </description>
+    </field>
+    <field name="Gyro. Yaw Rate Bias" abbrev="bias_r" type="fp32_t" unit="rad/s">
+      <description>
+        The angular velocity over body-fixed zz axis bias from sensor.
+      </description>
+    </field>
+    <field name="Course Over Ground" abbrev="cog" type="fp32_t" unit="rad">
+      <description>
+        Course over ground given by NED ground velocity vectors.
+      </description>
+    </field>
+    <field name="Continuous Yaw" abbrev="cyaw" type="fp32_t" unit="rad">
+      <description>
+        Continuous psi Euler angle (without normalizations).
+      </description>
+    </field>
+    <field name="GPS Rejection Filter Level" abbrev="lbl_rej_level" type="fp32_t">
+      <description>
+        GPS rejection filter level.
+      </description>
+    </field>
+    <field name="LBL Rejection Filter Level" abbrev="gps_rej_level" type="fp32_t">
+      <description>
+        LBL rejection filter level.
+      </description>
+    </field>
+    <field name="Variance - Custom Variable X" abbrev="custom_x" type="fp32_t">
+      <description>Custom variable.</description>
+    </field>
+    <field name="Variance - Custom Variable Y" abbrev="custom_y" type="fp32_t">
+      <description>Custom variable.</description>
+    </field>
+    <field name="Variance - Custom Variable Z" abbrev="custom_z" type="fp32_t">
+      <description>Custom variable.</description>
+    </field>
+  </message>
+
+  <message id="356" name="GPS Fix Rejection" abbrev="GpsFixRejection" source="vehicle" category="Navigation">
+    <field name="UTC Time of Fix" abbrev="utc_time" type="fp32_t" unit="s">
+      <description>
+        UTC time of the rejected GPS fix measured in seconds since
+        00:00:00 (midnight).
+      </description>
+    </field>
+    <field name="Reason" abbrev="reason" type="uint8_t" unit="Enumerated" prefix="RR">
+      <description>
+        Reason for rejection.
+      </description>
+      <value id="0" name="Above Threshold" abbrev="ABOVE_THRESHOLD">
+        <description>
+          New GPS Fix position is above a computed threshold.
+        </description>
+      </value>
+      <value id="1" name="Invalid Fix" abbrev="INVALID">
+        <description>
+          Invalid measurement.
+        </description>
+      </value>
+      <value id="2" name="Above Maximum HDOP" abbrev="ABOVE_MAX_HDOP">
+        <description>
+          Above maximum horizontal dilution of precision.
+        </description>
+      </value>
+      <value id="3" name="Above Maximum HACC" abbrev="ABOVE_MAX_HACC">
+        <description>
+          Above maximum horizontal accuracy index.
+        </description>
+      </value>
+      <value id="4" name="Lost Validity Bit" abbrev="LOST_VAL_BIT">
+        <description>
+          Lost one of the validity bits between consecutive GPS fixes.
+        </description>
+      </value>
+    </field>
+  </message>
+
+  <message id="357" name="LBL Range Acceptance" abbrev="LblRangeAcceptance" source="vehicle" category="Navigation">
+    <description>
+      When the vehicle uses Long Base Line navigation, this message
+      notifies that a new range was received from one of the acoustics
+      transponders. The message fields are used to identify the range
+      value and the transponder name. Also, this message has an
+      acceptance field that indicates whether a LBL range was accepted
+      or rejected, and if rejected, the reason why.
+    </description>
+    <field name="Beacon Identification Number" abbrev="id" type="uint8_t">
+      <description>
+        Identification number of the acoustic transponder from which
+        the range information was received.
+      </description>
+    </field>
+    <field name="Range" abbrev="range" type="fp32_t" unit="m">
+      <description>
+        Distance to the acoustic transponder.
+      </description>
+    </field>
+    <field name="Acceptance" abbrev="acceptance" type="uint8_t" unit="Enumerated" prefix="RR">
+      <description>
+        Reason for acceptance/rejection.
+      </description>
+      <value id="0" name="Accepted" abbrev="ACCEPTED">
+        <description>
+          This LBL range is accepted by the navigation filter.
+        </description>
+      </value>
+      <value id="1" name="Rejected - Above Threshold" abbrev="ABOVE_THRESHOLD">
+        <description>
+          New LBL Range is above a computed threshold.
+        </description>
+      </value>
+      <value id="2" name="Rejected - Singular Point" abbrev="SINGULAR">
+        <description>
+          Singular point.
+        </description>
+      </value>
+      <value id="3" name="Rejected - Not Enough Information" abbrev="NO_INFO">
+        <description>
+          The filter lacks information to properly use the received LBL range.
+        </description>
+      </value>
+      <value id="4" name="Rejected - Vehicle At Surface" abbrev="AT_SURFACE">
+        <description>
+          Vehicle is using only GPS fix when it is at surface.
+        </description>
+      </value>
+    </field>
+  </message>
+
+  <message id="358" name="DVL Rejection" abbrev="DvlRejection" source="vehicle" category="Navigation">
+    <description>
+      When the vehicle uses Doppler Velocity Log sensor, this message
+      notifies that a new measurement was locally rejected by the
+      navigation filter.
+    </description>
+    <field name="Type of velocity" abbrev="type" unit="Bitfield" type="uint8_t" prefix="TYPE">
+      <description>
+        This field represents the type of the rejected velocity.
+      </description>
+      <value id="0x01" abbrev="GV" name="Ground velocity"/>
+      <value id="0x02" abbrev="WV" name="Water velocity"/>
+    </field>
+    <field name="Reason" abbrev="reason" type="uint8_t" unit="Enumerated" prefix="RR">
+      <description>
+        Reason for rejection. There are two types of DVL measurement
+        filters. An Innovation filter checks the innovation between
+        the current measurement and the previous measurement within a
+        certain amount of time and an Absolute filter compares the
+        measurement with an absolute threshold value. Those filters
+        are tested using horizontal speed measurements, i.e.,
+        measurements in the x-axis and in the y-axis.
+      </description>
+      <value id="0" name="Innovation Threshold - X" abbrev="INNOV_THRESHOLD_X">
+        <description>
+          The current DVL x-axis measurement is discarded
+          because the absolute difference between the
+          value and the previous accepted DVL measurement
+          with a given time window is above a configurable
+          threshold.
+        </description>
+      </value>
+      <value id="1" name="Innovation Threshold - Y" abbrev="INNOV_THRESHOLD_Y">
+        <description>
+          The current DVL y-axis measurement is discarded
+          because the absolute difference between the
+          value and the previous accepted DVL measurement
+          with a given time window is above a configurable
+          threshold.
+        </description>
+      </value>
+      <value id="2" name="Absolute Threshold - X" abbrev="ABS_THRESHOLD_X">
+        <description>
+          The current DVL x-axis measurement is discarded
+          because the the absolute value is above a
+          configurable threshold.
+        </description>
+      </value>
+      <value id="3" name="Absolute Threshold - Y" abbrev="ABS_THRESHOLD_Y">
+        <description>
+          The current DVL y-axis measurement is discarded
+          because the the absolute value is above a
+          configurable threshold.
+        </description>
+      </value>
+    </field>
+    <field name="Value" abbrev="value" type="fp32_t" unit="m/s">
+      <description>
+        Value of the rejection.
+        If it is an innovation rejection the value is
+        the absolute difference between the previous
+        accepted DVL measurement and the current one.
+        If it is an absolute rejection the value is
+        the current DVL measurement.
+      </description>
+    </field>
+    <field name="Timestep" abbrev="timestep" type="fp32_t" unit="s">
+      <description>
+        Timestep of the rejection.
+        The timestep is 0 for an absolute rejection
+        since it is an instantaneous reading. For
+        innovation rejection it is the time difference
+        between the previous accepted DVL measurement
+        and the current one.
+      </description>
+    </field>
+  </message>
+
+  <message id="360" name="LBL Beacon Position Estimate" abbrev="LblEstimate" category="Navigation">
+    <description>
+      LBL Beacon position estimate.
+    </description>
+    <field name="LBL Beacon Configuration" abbrev="beacon" type="message" message-type="LblBeacon">
+      <description>
+        LBL Beacon configuration estimate.
+      </description>
+    </field>
+    <field name="North position" abbrev="x" type="fp32_t" unit="m">
+      <description>
+        The North position offset of the NED field with respect to origin.
+      </description>
+    </field>
+    <field name="East position" abbrev="y" type="fp32_t" unit="m">
+      <description>
+        The East position offset of the NED field with respect to origin.
+      </description>
+    </field>
+    <field name="North position variance" abbrev="var_x" type="fp32_t" unit="m">
+      <description>
+        The North offset variance of the North/East/Down
+        field with respect to LLH.
+      </description>
+    </field>
+    <field name="East position variance" abbrev="var_y" type="fp32_t" unit="m">
+      <description>
+        The East offset variance of the North/East/Down
+        field with respect to LLH.
+      </description>
+    </field>
+    <field name="Distance" abbrev="distance" type="fp32_t" unit="m">
+      <description>
+        Distance between current LBL Beacon position and filter estimation.
+      </description>
+    </field>
+  </message>
+
+  <message id="361" name="Alignment State" abbrev="AlignmentState" source="vehicle" category="Navigation">
+    <description>
+      This message notifies the vehicle is ready for dead-reckoning missions.
+    </description>
+    <field name="State" abbrev="state" type="uint8_t" unit="Enumerated" prefix="AS">
+      <description>
+        Alignment State.
+      </description>
+      <value id="0" name="Not Aligned" abbrev="NOT_ALIGNED"/>
+      <value id="1" name="Aligned" abbrev="ALIGNED"/>
+      <value id="2" name="Not Supported" abbrev="NOT_SUPPORTED"/>
+      <value id="3" name="Aligning" abbrev="ALIGNING"/>
+      <value id="4" name="Wrong Medium" abbrev="WRONG_MEDIUM"/>
+      <value id="5" name="Coarse Alignment" abbrev="COARSE_ALIGNMENT"/>
+      <value id="6" name="Fine Alignment" abbrev="FINE_ALIGNMENT"/>
+      <value id="7" name="System Ready" abbrev="SYSTEM_READY"/>
+    </field>
+  </message>
+</messages>

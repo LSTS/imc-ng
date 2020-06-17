@@ -1,0 +1,311 @@
+<messages>
+<!-- Actuation -->
+  <message id="301" name="Set Thruster Actuation" abbrev="SetThrusterActuation" source="vehicle" category="Actuation">
+    <description>
+      Actuate directly on a thruster.
+    </description>
+    <field name="Thruster Number" abbrev="id" type="uint8_t">
+      <description>
+        The identification number of the destination thruster.
+      </description>
+    </field>
+    <field name="Actuation Value" abbrev="value" type="fp32_t" min="-1" max="1">
+      <description>
+        Actuation magnitude.
+      </description>
+    </field>
+  </message>
+
+  <message id="302" name="Set Servo Position" abbrev="SetServoPosition" source="vehicle" category="Actuation">
+    <description>
+      Set the position of a servo.
+    </description>
+    <field name="Identifier" abbrev="id" type="uint8_t">
+      <description>
+        The identification number of the destination servo.
+      </description>
+    </field>
+    <field name="Position" abbrev="value" type="fp32_t" unit="rad" min="-1.5707963267948966" max="1.5707963267948966">
+      <description>
+        Actuation magnitude.
+      </description>
+    </field>
+  </message>
+
+  <message id="304" name="Remote Actions Request" abbrev="RemoteActionsRequest" source="vehicle,ccu" category="Actuation">
+    <description>
+      This message is used as query to request for the possible remote
+      actions (operation=QUERY and the list is empty in this
+      case). The vehicle responds using the same message type
+      returning the tuplelist with the pairs: Action,Type
+      (operation=REPORT). The type of action can be Axis, Hat or
+      Button.
+    </description>
+    <field name="operation" abbrev="op" type="uint8_t" unit="Enumerated" prefix="OP">
+      <description>
+        Operation to perform.
+      </description>
+      <value abbrev="REPORT" name="Report" id="0"/>
+      <value abbrev="QUERY" name="Query" id="1"/>
+    </field>
+    <field name="Actions" abbrev="actions" type="plaintext" unit="TupleList">
+      <description>
+        Example: "Propulsion=Axis,PanTilt=Hat,Lights=Button"
+      </description>
+    </field>
+  </message>
+
+  <message id="305" name="Remote Actions" abbrev="RemoteActions" source="ccu" flags="periodic" category="Actuation">
+    <description>
+      This message is used to send a periodic update of values for
+      each remote action. If the action is not on the list the assumed
+      value is 0.
+    </description>
+    <field name="Actions" abbrev="actions" type="plaintext" unit="TupleList">
+      <description>
+        List of values for each remote action (e.g: "Propeller=0.6,PanTilt=0.75,Lights=1").
+      </description>
+    </field>
+  </message>
+
+  <message id="306" name="Button Event" abbrev="ButtonEvent" source="vehicle" category="Actuation">
+    <description>
+      Event of a specific hardware button.
+    </description>
+    <field name="Button" abbrev="button" type="uint8_t">
+      <description>
+        Button identifier.
+      </description>
+    </field>
+    <field name="Value" abbrev="value" type="uint8_t">
+      <description>
+        Value of the button.
+      </description>
+    </field>
+  </message>
+
+  <message id="307" name="LCD Control" abbrev="LcdControl" source="vehicle" category="Actuation">
+    <description>
+      Control LCD.
+    </description>
+    <field name="Operation" abbrev="op" type="uint8_t" unit="Enumerated" prefix="OP">
+      <description>
+        The LCD action to perform
+      </description>
+      <value id="0" name="Turn off display" abbrev="TURN_OFF"/>
+      <value id="1" name="Turn on display" abbrev="TURN_ON"/>
+      <value id="2" name="Clear display" abbrev="CLEAR"/>
+      <value id="3" name="Write Line #0" abbrev="WRITE0"/>
+      <value id="4" name="Write Line #1" abbrev="WRITE1"/>
+    </field>
+    <field name="Text" abbrev="text" type="plaintext">
+      <description>
+        Text to be written (if defined write operation).
+      </description>
+    </field>
+  </message>
+
+  <message id="308" name="Power Operation" abbrev="PowerOperation" source="vehicle" category="Actuation">
+    <description>
+      This message allows controlling the system's power lines.
+    </description>
+    <field name="Operation" abbrev="op" type="uint8_t" unit="Enumerated" prefix="POP">
+      <description>
+        Operation type.
+      </description>
+      <value id="0" name="Power Down" abbrev="PWR_DOWN">
+        <description>
+          Request the destination entity of this message to power down
+          it's devices immediately. If the destination entity is the
+          special entity '0' the whole system will power down.
+        </description>
+      </value>
+      <value id="1" name="Power Down in Progress" abbrev="PWR_DOWN_IP">
+        <description>
+          The latest power down request is in progress and the time
+          remaining until power down is given in field 'time_remain'.
+        </description>
+      </value>
+      <value id="2" name="Power Down Aborted" abbrev="PWR_DOWN_ABORTED">
+        <description>
+          The latest power down request was aborted.
+        </description>
+      </value>
+      <value id="3" name="Schedule Power Down" abbrev="SCHED_PWR_DOWN">
+        <description>
+          Request the destination entity of this message to power down
+          it's devices at the time given in the field 'sched_time'. If
+          the destination entity is the special entity '0' the whole
+          system will power down.
+        </description>
+      </value>
+      <value id="4" name="Power Up" abbrev="PWR_UP">
+        <description>
+          Request the destination entity of this message to power up
+          it's devices.
+        </description>
+      </value>
+      <value id="5" name="Power Up in Progress" abbrev="PWR_UP_IP">
+        <description>
+          The latest power up request is in progress.
+        </description>
+      </value>
+      <value id="6" name="Schedule Power Up" abbrev="SCHED_PWR_UP">
+        <description>
+          Request the destination entity of this message to power up
+          it's devices at the time given in the field 'sched_time'. If
+          the destination entity is the special entity '0' the whole
+          system will power up.
+        </description>
+      </value>
+    </field>
+    <field name="Time Remaining" abbrev="time_remain" type="fp32_t" unit="s">
+      <description>
+        Time remaining to complete operation.
+      </description>
+    </field>
+    <field name="Scheduled Time" abbrev="sched_time" type="fp64_t" unit="s">
+      <description>
+        Scheduled time of operation.
+      </description>
+    </field>
+  </message>
+
+  <message id="309" name="Power Channel Control" abbrev="PowerChannelControl" source="vehicle,ccu" category="Actuation">
+    <description>
+      This message allows controlling power channels.
+    </description>
+    <field name="Channel Name" abbrev="name" type="plaintext">
+      <description>
+        The name of the power channel.
+      </description>
+    </field>
+    <field name="Operation" abbrev="op" type="uint8_t" unit="Enumerated" max="6" prefix="PCC_OP">
+      <description>
+        Operation to perform.
+      </description>
+      <value id="0" name="Turn Off" abbrev="TURN_OFF">
+        <description>
+          Turn off power channel specified in field 'id'.
+        </description>
+      </value>
+      <value id="1" name="Turn On" abbrev="TURN_ON">
+        <description>
+          Turn on power channel specified in field 'id'.
+        </description>
+      </value>
+      <value id="2" name="Toggle" abbrev="TOGGLE">
+        <description>
+          Toggle power channel specified in field 'id'.
+        </description>
+      </value>
+      <value id="3" name="Schedule Turn On" abbrev="SCHED_ON">
+        <description>
+          Turn on power channel specified in field 'id' in
+          'sched_time' seconds.
+        </description>
+      </value>
+      <value id="4" name="Schedule Turn Off" abbrev="SCHED_OFF">
+        <description>
+          Turn off power channel specified in field 'id' in
+          'sched_time' seconds.
+        </description>
+      </value>
+      <value id="5" name="Reset Schedules" abbrev="SCHED_RESET">
+        <description>
+          Reset all scheduled operations for the channel specified in
+          field 'id'.
+        </description>
+      </value>
+      <value id="6" name="Save Current State" abbrev="SAVE">
+        <description>
+          Save the current state of the channel 'id' to persistent
+          storage.
+        </description>
+      </value>
+    </field>
+    <field name="Scheduled Time" abbrev="sched_time" type="fp64_t" unit="s">
+      <description>
+        Scheduled time of operation.
+      </description>
+    </field>
+  </message>
+
+  <message id="310" name="Query Power Channel State" abbrev="QueryPowerChannelState" source="vehicle,ccu" category="Actuation">
+    <description>
+      Request the state of power channels.
+    </description>
+  </message>
+
+  <message id="311" name="Power Channel State" abbrev="PowerChannelState" source="vehicle,ccu" category="Actuation">
+    <description>
+      Message conveying the state of a power channel.
+    </description>
+    <field name="Name" abbrev="name" type="plaintext">
+      <description>
+        Power Channel Name.
+      </description>
+    </field>
+    <field name="State" abbrev="state" type="uint8_t" unit="Enumerated" prefix="PCS">
+      <description>
+        State of the Power Channel.
+      </description>
+      <value id="0" name="Off" abbrev="OFF">
+        <description>
+          Power channel is off.
+        </description>
+      </value>
+      <value id="1" name="On" abbrev="ON">
+        <description>
+          Power channel is on.
+        </description>
+      </value>
+    </field>
+  </message>
+
+  <message id="312" name="LED Brightness" abbrev="LedBrightness" source="vehicle" category="Actuation">
+    <description>
+      Brightness value of an LED (Light-Emitting Diode).
+    </description>
+    <field name="Name" abbrev="name" type="plaintext">
+      <description>
+        LED name.
+      </description>
+    </field>
+    <field name="Value" abbrev="value" type="uint8_t">
+      <description>
+        Brightness value.
+      </description>
+    </field>
+  </message>
+
+  <message id="313" name="Query LED Brightness" abbrev="QueryLedBrightness" source="vehicle" category="Actuation">
+    <description>
+      Query the brightness of an LED (Light-Emitting Diode). The
+      recipient of this message shall reply with 'LedBrightness'.
+    </description>
+    <field name="Name" abbrev="name" type="plaintext">
+      <description>
+        LED name.
+      </description>
+    </field>
+  </message>
+
+  <message id="314" name="Set LED Brightness" abbrev="SetLedBrightness" source="vehicle" category="Actuation">
+    <description>
+      Control the brightness of an LED (Light-Emitting Diode). The
+      recipient of this message shall set the intensity of the LED to
+      the desired 'value' and reply with 'LedBrightness'.
+    </description>
+    <field name="Name" abbrev="name" type="plaintext">
+      <description>
+        LED name.
+      </description>
+    </field>
+    <field name="Value" abbrev="value" type="uint8_t">
+      <description>
+        Desired brightness value.
+      </description>
+    </field>
+  </message>
+</messages>
