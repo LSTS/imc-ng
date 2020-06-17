@@ -19,7 +19,6 @@
       </description>
     </field>
   </message>
-</messages>
 <message id="183" name="Extended Receive Signal Strength Information" abbrev="ExtendedRSSI" flags="deprecated" source="vehicle" category="Networking">
     <description>
     Measure of the RSSI by a networking device.
@@ -208,3 +207,24 @@
       </description>
     </field>
   </message>
+  <!-- CCU Messages (Internal and between CCUs) -->
+  <message id="606" name="CCU Event" abbrev="CcuEvent" source="ccu" category="CCU">
+    <description>
+      This message is used to signal events among running CCUs.
+    </description>
+    <field name="Event Type" abbrev="type" type="uint8_t" unit="Enumerated" prefix="EVT">
+      <value abbrev="LOG_ENTRY" name="Log Book Entry Added" id="1" />
+      <value abbrev="PLAN_ADDED" name="Plan Added" id="2" />
+      <value abbrev="PLAN_REMOVED" name="Plan Removed" id="3" />
+      <value abbrev="PLAN_CHANGED" name="Plan Changed" id="4" />
+      <value abbrev="MAP_FEATURE_ADDED" name="Map feature added" id="5" />
+      <value abbrev="MAP_FEATURE_REMOVED" name="Map feature removed" id="6" />
+      <value abbrev="MAP_FEATURE_CHANGED" name="Map feature changed" id="7" />
+      <value abbrev="TELEOPERATION_STARTED" name="The sender is now teleoperating the vehicle" id="8" />
+      <value abbrev="TELEOPERATION_ENDED" name="The sender stopped teleoperating the vehicle" id="9" />
+    </field>
+
+    <field name="Identifier" abbrev="id" type="plaintext"/>
+    <field name="Additional Data" abbrev="arg" type="message"/>
+  </message>
+</messages>
