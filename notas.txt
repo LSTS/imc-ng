@@ -1,0 +1,6 @@
+Como resolver o problema de outros CPUs não utilizar um IMC Address? Para ser um IMC Address por veiculo/equipamento e não por CPU.
+
+RegisterManeuver é a mensagem que inicia a manobra?
+
+para que é usada o enum flags. utilizado como atributo em algumas mensagens.
+
